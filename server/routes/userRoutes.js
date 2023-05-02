@@ -1,9 +1,9 @@
 import express from "express"
 import {
   getUser,
-  getSaved,
-  getLikes,
-  getReviews,
+  getSavedMovies,
+  getLikedReviews,
+  getReviewedMovies,
   updateUser,
 } from "../controllers/users.js"
 import { verifyToken } from "../middleware/auth.js"
@@ -12,9 +12,9 @@ const userRouter = express.Router()
 
 // read
 userRouter.get("/:id", verifyToken, getUser)
-userRouter.get("/:id/saved", verifyToken, getSaved)
-userRouter.get("/:id/likes", verifyToken, getLikes)
-userRouter.get("/:id/reviews", verifyToken, getReviews)
+userRouter.get("/:id/saved", verifyToken, getSavedMovies)
+userRouter.get("/:id/likes", verifyToken, getLikedReviews)
+userRouter.get("/:id/reviews", verifyToken, getReviewedMovies)
 
 // update
 userRouter.get("/:id/update", verifyToken, updateUser)

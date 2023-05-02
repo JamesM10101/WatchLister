@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema({
   },
   likes: {
     type: Map,
-    of: Boolean, // userId : true
+    of: Boolean, // reviewId : true
   },
 })
 
