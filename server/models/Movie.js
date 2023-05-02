@@ -12,6 +12,9 @@ const MovieSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  imagePath: {
+    type: String,
+  },
   releaseDate: {
     type: Date,
   },
