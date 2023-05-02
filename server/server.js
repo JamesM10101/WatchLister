@@ -8,6 +8,10 @@ import helmet from "helmet"
 import morgan from "morgan"
 import path from "path"
 import { fileURLToPath } from "url"
+import authRoutes from "./routes/authRoutes.js"
+import movieRoutes from "./routes/movieRoutes.js"
+import reviewRoutes from "./routes/reviewRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 
 // Configs
 const __filename = fileURLToPath(import.meta.url)
