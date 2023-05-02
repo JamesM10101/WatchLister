@@ -39,6 +39,11 @@ const UserSchema = new mongoose.Schema({
     type: Map,
     of: Boolean, // reviewId : true
   },
+  admin: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 })
 
 const User = mongoose.model("User", UserSchema)
