@@ -48,10 +48,10 @@ const upload = multer({ storage })
 app.post("/auth/register", upload.single("picture"), register)
 
 // routes
-app.get("/auth", authRoutes)
-app.get("/users", userRoutes)
-app.get("/movies", movieRoutes)
-app.get("/reviews", reviewRoutes)
+app.use("/auth", authRoutes)
+app.use("/users", userRoutes)
+app.use("/movies", movieRoutes)
+app.use("/reviews", reviewRoutes)
 
 // mongoose
 const PORT = process.env.PORT || 5001
