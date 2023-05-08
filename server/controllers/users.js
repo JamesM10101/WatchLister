@@ -124,8 +124,15 @@ export const updateUser = async (req, res) => {
     const { username, email, password, picturePath } = req.body
     const user = await User.findById(id)
 
+    // check the email isn't taken
+    if (user.email != email) {
+      if (await User.find({ email: email })) {
+        return res.status(403).json({ error: "Email already in use" })
+      }
+    }
+
     // update the user details
-    user.userName = username
+    user.username = username
     user.email = email
     user.password = await bcrypt.hash(password, 15)
     user.picturePath = picturePath

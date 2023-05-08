@@ -17,6 +17,6 @@ userRouter.get("/:id/likes", verifyToken, getLikedReviews)
 userRouter.get("/:id/reviews", verifyToken, getReviewedMovies)
 
 // update
-userRouter.get("/:id/update", verifyToken, updateUser)
+userRouter.patch("/:id/update", verifyToken, updateUser)
 
 export default userRouter
