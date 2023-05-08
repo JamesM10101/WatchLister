@@ -1,6 +1,6 @@
-import Movie from "../models/Movie"
-import Review from "../models/Review"
-import User from "../models/User"
+import Movie from "../models/Movie.js"
+import Review from "../models/Review.js"
+import User from "../models/User.js"
 
 // create
 export const createReview = async (req, res) => {

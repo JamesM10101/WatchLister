@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-import Movie from "./Movie"
 
 const UserSchema = new mongoose.Schema({
   userId: {

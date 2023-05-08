@@ -1,5 +1,5 @@
-import Movie from "../models/Movie"
-import User from "../models/User"
+import Movie from "../models/Movie.js"
+import User from "../models/User.js"
 
 // create
 export const createMovie = async (req, res) => {
