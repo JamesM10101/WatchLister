@@ -12,6 +12,7 @@ import authRoutes from "./routes/authRoutes.js"
 import movieRoutes from "./routes/movieRoutes.js"
 import reviewRoutes from "./routes/reviewRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import { register } from "./controllers/auth.js"
 
 // Configs
 const __filename = fileURLToPath(import.meta.url)
@@ -36,17 +37,15 @@ const storage = multer.diskStorage({
     cb(null, "public/assets/userImages")
   },
   filename: function (req, file, cb) {
-    // ensure filename is unique
-    cb(null, `${Date.now()}-${file.originalname}`)
+    // ensure filename is unique -- to be done on frontend
+    cb(null, file.originalname)
   },
 })
 
 const upload = multer({ storage })
 
 // routes with file upload
-app.post("/auth/register", upload.single("picture"), (req, res) =>
-  res.status(200).json({ msg: "test" })
-)
+app.post("/auth/register", upload.single("picture"), register)
 
 // routes
 app.get("/auth", authRoutes)

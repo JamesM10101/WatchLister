@@ -5,15 +5,7 @@ import User from "../models/User.js"
 export const register = async (req, res) => {
   try {
     // new user data
-    const {
-      username,
-      email,
-      password,
-      picturePath,
-      savedMovies,
-      reviews,
-      likes,
-    } = req.body
+    const { username, email, password, picturePath } = req.body
 
     // password encryption (salt and hash)
     const passwordHash = await bcrypt.hash(password, 15)
@@ -24,9 +16,10 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
       picturePath,
-      savedMovies,
-      reviews,
-      likes,
+      savedMovies: [],
+      reviews: [],
+      likes: {},
+      admin: false,
     })
     const savedUser = await newUser.save()
 
