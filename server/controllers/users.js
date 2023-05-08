@@ -72,7 +72,7 @@ export const getLikedReviews = async (req, res) => {
 
     // get liked reviews
     const likedReviews = await Promise.all(
-      user.likes.map((id) => Review.findById(id))
+      user.likes.size ? user.likes.map((id) => Review.findById(id)) : []
     )
 
     // format the reviews
