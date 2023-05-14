@@ -200,12 +200,13 @@ export const deleteReview = async (req, res) => {
     const { id } = req.params
     const { userId } = req.body
 
-    // reviewer id
+    // user and reviewer id
+    const user = await User.findById(userId)
     const review = await Review.findById(id)
     const reviewerId = review.userId
 
     // check that deletion is authorized
-    if (reviewerId != userId) {
+    if (reviewerId != userId && !user.admin) {
       return res.status(401).json({
         msg: "Not Authorized",
       })
