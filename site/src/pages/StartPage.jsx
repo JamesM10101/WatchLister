@@ -1,5 +1,13 @@
+import { Popover } from "@mui/material"
+import Navbar from "../components/Navbar"
+
 function StartPage() {
-  return <div>StartPage</div>
+  return (
+    <div>
+      <Navbar />
+      StartPage
+    </div>
+  )
 }
 
 export default StartPage
