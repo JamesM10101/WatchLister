@@ -21,7 +21,7 @@ import { Link } from "react-router-dom"
 import FlexBetween from "./shared/FlexBetween.jsx"
 import defaultUserProfile from "../resources/defaultUserProfile.jpg"
 
-function Navbar({ userImg, userId }) {
+function Navbar() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
   const isFullSizeScreen = useMediaQuery("(min-width: 600px)")
@@ -138,13 +138,13 @@ function Navbar({ userImg, userId }) {
 
         {/* User Icon (WARNING: Nested Ternaries Ahead 🤮) */}
         {/* Set the user icon to the users image or first initial -- routes to account page */}
-        {userImg || user ? (
-          <Link to={`/profile/${userId}`} style={{ textDecoration: "none" }}>
-            {userImg ? (
+        {user ? (
+          <Link to={`/profile/${user._id}`} style={{ textDecoration: "none" }}>
+            {user.picturePath !== "undefined" ? (
               <Avatar
                 alt="profile"
                 sx={{ bgcolor: palette.neutral.dark }}
-                src={`http://localhost:${process.env.SERVER_PORT}/assets/${userImg}`}
+                src={`http://localhost:${process.env.SERVER_PORT}/assets/${user.picturePath}`}
               />
             ) : user ? (
               <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>
