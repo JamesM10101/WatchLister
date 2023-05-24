@@ -47,12 +47,12 @@ export const login = async (req, res) => {
 
     // sign the jwt token & delete the password
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-    delete user.password
+    user.password = undefined
 
     // return the user and signed token
     res.status(200).json({ token, user })
   } catch (err) {
     // return the error message
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: err.message })
   }
 }
