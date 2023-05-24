@@ -9,9 +9,11 @@ export const createMovie = async (req, res) => {
     const {
       title,
       description,
+      imagePath,
       releaseDate,
       runtime,
       mpaRating,
+      genre,
       director,
       actors,
     } = req.body
@@ -24,9 +26,11 @@ export const createMovie = async (req, res) => {
     const formattedMovie = new Movie({
       title,
       description,
+      imagePath,
       releaseDate,
       runtime,
       mpaRating,
+      genre,
       director,
       actors,
     })
@@ -81,6 +85,7 @@ export const updateMovieDetails = async (req, res) => {
       releaseDate,
       runtime,
       mpaRating,
+      genre,
       director,
       actors,
     } = req.body
@@ -93,6 +98,7 @@ export const updateMovieDetails = async (req, res) => {
     movie.releaseDate = releaseDate
     movie.runtime = runtime
     movie.mpaRating = mpaRating
+    movie.genre = genre
     movie.director = director
     movie.actors = actors
 

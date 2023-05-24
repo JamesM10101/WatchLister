@@ -1,10 +1,6 @@
 import mongoose from "mongoose"
 
 const MovieSchema = new mongoose.Schema({
-  movieId: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
@@ -23,6 +19,10 @@ const MovieSchema = new mongoose.Schema({
   },
   mpaRating: {
     type: String,
+  },
+  genre: {
+    type: Array,
+    of: String,
   },
   director: {
     type: Array,
