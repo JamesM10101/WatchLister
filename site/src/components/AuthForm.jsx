@@ -10,7 +10,7 @@ import {
 import { Clear as ClearIcon } from "@mui/icons-material"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { object, string } from "yup"
 import { Form, Formik } from "formik"
 import { Box } from "@mui/system"
@@ -45,7 +45,6 @@ const initialValuesLogin = {
 }
 
 function AuthForm() {
-  const showAuthForm = useSelector((state) => state.needAuthForm)
   const [isLogin, setIsLogin] = useState(false)
   const [showPassowrd, setShowPassword] = useState(false)
   const { palette } = useTheme()
@@ -123,7 +122,6 @@ function AuthForm() {
       bottom={0}
       zIndex={9999}
       sx={{ overflowX: "hidden" }}
-      visibility={showAuthForm ? "visible" : "hidden"}
     >
       {/* Exit Button */}
       <IconButton

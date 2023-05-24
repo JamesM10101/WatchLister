@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar"
 
 function App() {
   const mode = useSelector((state) => state.mode)
+  const showAuthForm = useSelector((state) => state.needAuthForm)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   return (
@@ -22,7 +23,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Navbar />
-        <AuthForm />
+        {showAuthForm ? <AuthForm /> : ""}
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/home" element={<HomePage />} />
