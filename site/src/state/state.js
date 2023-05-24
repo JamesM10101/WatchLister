@@ -1,18 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialAppState = {
+const initialState = {
   mode: "light",
   user: null,
   token: null,
+  needAuthForm: false,
   reviews: {},
 }
 
 export const authSlice = createSlice({
   name: "auth",
-  initialAppState,
+  initialState,
   reducers: {
     setMode: (state) => {
       state.mode = state.mode === "light" ? "dark" : "light"
+    },
+    setNeedAuthForm: (state) => {
+      state.needAuthForm = state.needAuthForm ? false : true
     },
     setLogin: (state, action) => {
       state.user = action.payload.user
@@ -33,6 +37,12 @@ export const authSlice = createSlice({
   },
 })
 
-export const { setMode, setLogin, setLogout, setReviews, setReview } =
-  authSlice.actions
+export const {
+  setMode,
+  setNeedAuthForm,
+  setLogin,
+  setLogout,
+  setReviews,
+  setReview,
+} = authSlice.actions
 export default authSlice.reducer

@@ -16,7 +16,7 @@ import {
   Search,
 } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
-import { setMode } from "../state/state.js"
+import { setMode, setNeedAuthForm } from "../state/state.js"
 import { Link } from "react-router-dom"
 import FlexBetween from "./shared/FlexBetween.jsx"
 import defaultUserProfile from "../resources/defaultUserProfile.jpg"
@@ -108,7 +108,9 @@ function Navbar({ userImg, userId }) {
 
         {/* Theme Mode */}
         <IconButton
-          onClick={() => dispatch(setMode())}
+          onClick={() => {
+            dispatch(setMode())
+          }}
           sx={{ transform: "scale(1.3)" }}
         >
           {themeMode === "dark" ? (
@@ -155,9 +157,7 @@ function Navbar({ userImg, userId }) {
         ) : (
           // set the default profile image
           <Avatar
-            onClick={() => {
-              /* todo -- alert of login */
-            }}
+            onClick={() => dispatch(setNeedAuthForm())}
             alt="profile"
             src={defaultUserProfile}
             sx={{

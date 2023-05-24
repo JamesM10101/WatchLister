@@ -10,6 +10,8 @@ import StartPage from "./pages/StartPage.jsx"
 import MoviePage from "./pages/MoviePage.jsx"
 import ReviewPage from "./pages/ReviewPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx"
+import AuthForm from "./components/AuthForm.jsx"
+import Navbar from "./components/Navbar"
 
 function App() {
   const mode = useSelector((state) => state.mode)
@@ -19,6 +21,8 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Navbar />
+        <AuthForm />
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/home" element={<HomePage />} />

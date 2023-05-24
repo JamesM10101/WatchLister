@@ -1,13 +1,9 @@
-import { Popover } from "@mui/material"
+import { useSelector } from "react-redux"
 import Navbar from "../components/Navbar"
+import HomePage from "./HomePage"
 
 function StartPage() {
-  return (
-    <div>
-      <Navbar />
-      StartPage
-    </div>
-  )
+  return <div>StartPage</div>
 }
 
 export default StartPage
