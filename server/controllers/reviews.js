@@ -43,7 +43,7 @@ export const getReview = async (req, res) => {
     const { id } = req.params
 
     // get the review
-    const review = Review.findById(id)
+    const review = await Review.findById(id)
 
     // return the review
     res.status(200).json(review)

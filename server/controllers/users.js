@@ -26,7 +26,7 @@ export const getSavedMovies = async (req, res) => {
 
     // get the movies
     const savedMovies = await Promise.all(
-      user.savedMovies.map((id) => Movie.findById(id))
+      user.savedMovies.map(async (id) => await Movie.findById(id))
     )
 
     // format the movies
@@ -72,7 +72,9 @@ export const getLikedReviews = async (req, res) => {
 
     // get liked reviews
     const likedReviews = await Promise.all(
-      user.likes.size ? user.likes.map((id) => Review.findById(id)) : []
+      user.likes.size
+        ? user.likes.map(async (id) => await Review.findById(id))
+        : []
     )
 
     // format the reviews
@@ -98,7 +100,7 @@ export const getReviewedMovies = async (req, res) => {
 
     // get reviews
     const likedReviews = await Promise.all(
-      user.reviews.map((id) => Review.findById(id))
+      user.reviews.map(async (id) => await Review.findById(id))
     )
 
     // format the reviews

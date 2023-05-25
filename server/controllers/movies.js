@@ -48,7 +48,7 @@ export const createMovie = async (req, res) => {
 export const getAllMovies = async (req, res) => {
   try {
     // get all the movies
-    const movies = Movie.find()
+    const movies = await Movie.find()
 
     // return the movies
     res.status(200).json(movies)
@@ -64,7 +64,7 @@ export const getMovie = async (req, res) => {
     const { id } = req.params
 
     // get the movie
-    const movie = Movie.findById(id)
+    const movie = await Movie.findById(id)
 
     // return the movies
     res.status(200).json(movie)
@@ -120,13 +120,13 @@ export const deleteMovie = async (req, res) => {
     const { userId } = req.body
 
     // get the user
-    const user = User.findById(userId)
+    const user = await User.findById(userId)
 
     // check that the user is an admin
     if (!user.admin) return res.status(401).json({ error: "Unauthorized User" })
 
     // delete the movie
-    const deletedMovie = Movie.findByIdAndDelete(id)
+    const deletedMovie = await Movie.findByIdAndDelete(id)
 
     res.status(204).json(deletedMovie)
   } catch (err) {
