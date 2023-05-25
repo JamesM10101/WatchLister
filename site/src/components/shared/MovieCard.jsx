@@ -57,7 +57,7 @@ function MovieCard({ movie }) {
             }}
           >
             <Star sx={{ scale: ".9" }} />
-            {movie.rating}
+            {movie.rating ? movie.rating : "Unrated"}
           </Typography>
         </Box>
       </Link>
