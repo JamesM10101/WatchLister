@@ -25,8 +25,8 @@ function App() {
         <Navbar />
         {showAuthForm ? <AuthForm /> : ""}
         <Routes>
-          <Route path="/" element={<StartPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/start" element={<StartPage />} />
           <Route path="/movie/:movieId" element={<MoviePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/review/:reviewId" element={<ReviewPage />} />
