@@ -12,7 +12,7 @@ function MovieCard({ movie }) {
         userSelect: "none",
       }}
     >
-      <Link to={`movie/${movie._id}`}>
+      <Link to={`movie/${movie._id}`} draggable="false">
         <img
           width={"100%"}
           alt={movie.title}
