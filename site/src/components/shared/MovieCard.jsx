@@ -7,18 +7,18 @@ function MovieCard({ movie }) {
   return (
     <Box
       position={"relative"}
-      width={"130px"}
+      height={"200px"}
       sx={{
         userSelect: "none",
       }}
     >
       <Link to={`movie/${movie._id}`} draggable="false">
         <img
-          width={"100%"}
+          height={"200px"}
           alt={movie.title}
           draggable="false"
           src={movie.imagePath ? movie.imagePath : noImage}
-          style={{ borderRadius: ".5rem", objectFit: "fill" }}
+          style={{ borderRadius: ".5rem", objectFit: "cover" }}
         />
         <Box
           position="absolute"
