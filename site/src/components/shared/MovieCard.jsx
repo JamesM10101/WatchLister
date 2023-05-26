@@ -27,10 +27,10 @@ function MovieCard({ movie }) {
           bottom={0}
           zIndex={10}
           borderRadius="0 0 .5rem .5rem"
-          background="rgba(0, 0, 0, 0.62)"
           boxShadow="0 4px 30px rgba(0, 0, 0, 0.1)"
           sx={{
-            backdropFilter: "blur(.15rem)",
+            backgroundColor: "rgba(11, 11, 11, 0.30)",
+            backdropFilter: "blur(.08rem)",
             WebkitBackdropFilter: "blur(9.6px)",
           }}
         >
