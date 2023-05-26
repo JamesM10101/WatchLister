@@ -5,7 +5,7 @@ export const verifyToken = async (req, res, next) => {
   try {
     // grab the auth header from frontend
     let token = req.header("Authorization")
-    const { userId } = req.body
+    const userId = req.header("userId")
 
     if (!token) {
       return res.status(403).send("Access Denied")
@@ -18,7 +18,7 @@ export const verifyToken = async (req, res, next) => {
     const user = await User.findById(userId)
     if (!user) return res.status(400).json({ error: "User does not exist." })
 
-    const verified = jwt.verify(token, process.env.JWT_SECRET + user.id)
+    const verified = jwt.verify(token, process.env.JWT_SECRET + user._id)
     req.user = verified
     next()
   } catch (err) {

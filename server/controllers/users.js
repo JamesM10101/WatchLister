@@ -22,11 +22,11 @@ export const getSavedMovies = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
-    const { userId } = req.body
+    const userId = req.header("userId")
     const user = await User.findById(id)
 
     // check the user is authroized -- this ID has been comfirmed through verifyToken
-    if (userId != user.id || !user.admin) {
+    if (userId != user._id && !user.admin) {
       return res.status(403).json({ error: "Unauthorized user" })
     }
 
@@ -74,11 +74,11 @@ export const getLikedReviews = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
-    const { userId } = req.body
+    const userId = req.header("userId")
     const user = await User.findById(id)
 
     // check the user is authroized -- this ID has been comfirmed through verifyToken
-    if (userId != user.id || !user.admin) {
+    if (userId != user._id && !user.admin) {
       return res.status(403).json({ error: "Unauthorized user" })
     }
 
@@ -135,11 +135,12 @@ export const updateUser = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
-    const { userId, username, email, password, picturePath } = req.body
+    const userId = req.header("userId")
+    const { username, email, password, picturePath } = req.body
     const user = await User.findById(id)
 
     // check the user is authroized -- this ID has been comfirmed through verifyToken
-    if (userId != user.id) {
+    if (userId != user._id) {
       return res.status(403).json({ error: "Unauthorized user" })
     }
 
