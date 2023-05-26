@@ -5,7 +5,8 @@ const initialState = {
   user: null,
   token: null,
   needAuthForm: false,
-  reviews: {},
+  // reviews: [],
+  movies: [],
 }
 
 export const authSlice = createSlice({
@@ -26,14 +27,22 @@ export const authSlice = createSlice({
       state.user = null
       state.token = null
     },
-    setReviews: (state, action) => {
-      state.reviews = action.payload.reviews
+    setMovies: (state, action) => {
+      state.movies = action.payload.movies
     },
-    setReview: (state, action) => {
-      const updatedReviews = state.reviews
-      updatedReviews[action.payload.review._id] = action.payload.review
-      state.reviews = updatedReviews
+    setMovie: (state, action) => {
+      const updatedMovies = state.movies
+      updatedMovies[action.payload.movie._id] = action.payload.movie
+      state.movies = updatedMovies
     },
+    // setReviews: (state, action) => {
+    //   state.reviews = action.payload.reviews
+    // },
+    // setReview: (state, action) => {
+    //   const updatedReviews = state.reviews
+    //   updatedReviews[action.payload.review._id] = action.payload.review
+    //   state.reviews = updatedReviews
+    // },
   },
 })
 
@@ -42,7 +51,9 @@ export const {
   setNeedAuthForm,
   setLogin,
   setLogout,
-  setReviews,
-  setReview,
+  setMovies,
+  setMovie,
+  // setReviews,
+  // setReview,
 } = authSlice.actions
 export default authSlice.reducer
