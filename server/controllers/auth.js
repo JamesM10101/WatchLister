@@ -46,7 +46,7 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ error: "Invalid Credentials" })
 
     // sign the jwt token & delete the password
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET + user.id)
     user.password = undefined
 
     // return the user and signed token
