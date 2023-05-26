@@ -17,9 +17,9 @@ const reviewRouter = express.Router()
 reviewRouter.get("/:id/create", verifyToken, createReview)
 
 // read
-reviewRouter.get("/:id", verifyToken, getReview)
-reviewRouter.get("/:id/user", verifyToken, getAllUserReviews)
-reviewRouter.get("/:id/movie", verifyToken, getAllMovieReviews)
+reviewRouter.get("/:id", getReview)
+reviewRouter.get("/:id/user", getAllUserReviews)
+reviewRouter.get("/:id/movie", getAllMovieReviews)
 
 // update
 reviewRouter.patch("/:id/like", verifyToken, toggleLikeReview)
