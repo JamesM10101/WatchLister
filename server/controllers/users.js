@@ -22,7 +22,13 @@ export const getSavedMovies = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
+    const { userId } = req.body
     const user = await User.findById(id)
+
+    // check the user is authroized -- this ID has been comfirmed through verifyToken
+    if (userId != user.id || !user.admin) {
+      return res.status(403).json({ error: "Unauthorized user" })
+    }
 
     // get the movies
     const savedMovies = await Promise.all(
@@ -68,7 +74,13 @@ export const getLikedReviews = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
+    const { userId } = req.body
     const user = await User.findById(id)
+
+    // check the user is authroized -- this ID has been comfirmed through verifyToken
+    if (userId != user.id || !user.admin) {
+      return res.status(403).json({ error: "Unauthorized user" })
+    }
 
     // get liked reviews
     const likedReviews = await Promise.all(
@@ -123,8 +135,13 @@ export const updateUser = async (req, res) => {
   try {
     // get the user with its id
     const { id } = req.params
-    const { username, email, password, picturePath } = req.body
+    const { userId, username, email, password, picturePath } = req.body
     const user = await User.findById(id)
+
+    // check the user is authroized -- this ID has been comfirmed through verifyToken
+    if (userId != user.id) {
+      return res.status(403).json({ error: "Unauthorized user" })
+    }
 
     // check the email isn't taken
     if (user.email != email) {
