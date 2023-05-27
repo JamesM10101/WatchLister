@@ -5,6 +5,7 @@ import {
   Card,
   IconButton,
   InputBase,
+  Typography,
 } from "@mui/material"
 import React, { useState } from "react"
 import FlexBetween from "./FlexBetween"
@@ -41,6 +42,12 @@ function CreateReviewCard({ movieId }) {
 
   // call backend create review function
   const createReview = async () => {
+    if (!reviewTitle) {
+      setSeverity("error")
+      setAlertMsg("Title Required")
+      return
+    }
+
     await fetch(
       `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${movieId}/create`,
       {
@@ -88,6 +95,10 @@ function CreateReviewCard({ movieId }) {
       <InputBase
         id="createReviewTitle"
         onChange={(event) => {
+          if (alertMsg === "Title Required") {
+            setSeverity("")
+            setAlertMsg("")
+          }
           setReviewTitle(event.target.value)
         }}
         sx={{
@@ -129,13 +140,8 @@ function CreateReviewCard({ movieId }) {
       <Box marginLeft=".3rem">{stars}</Box>
 
       {severity && (
-        <Alert
-          severity={severity}
-          sx={{
-            backgroundColor: palette.background.alt,
-          }}
-        >
-          {alertMsg}
+        <Alert severity={severity}>
+          <Typography>{alertMsg}</Typography>
         </Alert>
       )}
     </Card>
