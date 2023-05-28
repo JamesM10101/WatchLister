@@ -1,18 +1,29 @@
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Box, Typography } from "@mui/material"
 import { Star } from "@mui/icons-material"
 import noImage from "../../resources/noImage.png"
 
 function MovieCard({ movie }) {
+  const navigate = useNavigate()
+
   return (
     <Box
       position={"relative"}
       height={"200px"}
       sx={{
         userSelect: "none",
+        "&:hover": { cursor: "pointer" },
       }}
     >
-      <Link to={`movie/${movie._id}`} draggable="false">
+      <Box
+        onClick={() =>
+          navigate(`movie/${movie._id}`, {
+            state: {
+              movie: movie,
+            },
+          })
+        }
+      >
         <img
           height={"200px"}
           alt={movie.title}
@@ -60,7 +71,7 @@ function MovieCard({ movie }) {
             {movie.rating ? movie.rating : "Unrated"}
           </Typography>
         </Box>
-      </Link>
+      </Box>
     </Box>
   )
 }
