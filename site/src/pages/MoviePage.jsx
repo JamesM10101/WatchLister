@@ -1,7 +1,7 @@
 import { Circle, ExpandMore, Star } from "@mui/icons-material"
-import { Box, Card, Chip, Typography, useMediaQuery } from "@mui/material"
+import { Box, Chip, Typography, useMediaQuery } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useLocation, useParams } from "react-router-dom"
 import FlexBetween from "../components/shared/FlexBetween.jsx"
 import CreateReviewCard from "../components/shared/CreateReviewCard.jsx"
@@ -10,7 +10,6 @@ import MovieReviewCard from "../components/shared/MovieReviewCard.jsx"
 function MoviePage(props) {
   const { movieId } = useParams()
   const state = useLocation().state
-  const dispatch = useDispatch()
   const token = useSelector((state) => state.token)
   const isFullSizeScreen = useMediaQuery("(min-width: 1000px)")
 
@@ -314,7 +313,11 @@ function MoviePage(props) {
               movie.reviews.map((reviewId, i) =>
                 i < reviewCount ? (
                   <Box margin="auto" marginTop=".5rem">
-                    <MovieReviewCard reviewId={reviewId} token={token} />
+                    <MovieReviewCard
+                      movie={movie}
+                      reviewId={reviewId}
+                      token={token}
+                    />
                   </Box>
                 ) : i === reviewCount ? (
                   <Box

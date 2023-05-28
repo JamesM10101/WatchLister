@@ -1,6 +1,5 @@
 import {
   Alert,
-  AlertTitle,
   Box,
   Card,
   IconButton,
@@ -14,11 +13,20 @@ import { useDispatch, useSelector } from "react-redux"
 import { setNeedAuthForm } from "../../state/state"
 import { useTheme } from "@emotion/react"
 
-function CreateReviewCard({ movieId }) {
+function CreateReviewCard({
+  reviewId,
+  movieId,
+  pTitle = "",
+  pReview = "",
+  pRating = 0,
+  edit = false,
+  setIsReviewEdit,
+  setReviewForMovie,
+}) {
   const palette = useTheme().palette
-  const [rating, setRating] = useState(0)
-  const [review, setReview] = useState("")
-  const [reviewTitle, setReviewTitle] = useState("")
+  const [rating, setRating] = useState(pRating)
+  const [review, setReview] = useState(pReview)
+  const [reviewTitle, setReviewTitle] = useState(pTitle)
   const [severity, setSeverity] = useState("")
   const [alertMsg, setAlertMsg] = useState("")
   const dispatch = useDispatch()
@@ -35,7 +43,7 @@ function CreateReviewCard({ movieId }) {
           if (rating === i + 1) setRating(0)
           else setRating(i + 1)
         }}
-        sx={{ color: rating > i ? "#FFD700" : "" }}
+        sx={{ color: rating > i || rating > pRating ? "#FFD700" : "" }}
       />
     )
   }
@@ -49,9 +57,11 @@ function CreateReviewCard({ movieId }) {
     }
 
     await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${movieId}/create`,
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${
+        edit ? reviewId : movieId
+      }/${edit ? "edit" : "create"}`,
       {
-        method: "POST",
+        method: edit ? "PATCH" : "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -64,8 +74,7 @@ function CreateReviewCard({ movieId }) {
         }),
       }
     ).then(async (result) => {
-      const review = await result.json()
-      if (result.status == 201) {
+      if (result.status === 201 || result.status === 200) {
         // success -- clear fields
         setSeverity("success")
         setAlertMsg("Review Posted")
@@ -74,6 +83,11 @@ function CreateReviewCard({ movieId }) {
         setReviewTitle("")
         document.getElementById("createReviewTitle").value = ""
         document.getElementById("createReviewBody").value = ""
+
+        if (edit) {
+          setIsReviewEdit(false)
+          setReviewForMovie(await result.json())
+        }
       } else {
         setSeverity("error")
         setAlertMsg(result.error)
@@ -109,6 +123,7 @@ function CreateReviewCard({ movieId }) {
           fontSize: "1rem",
         }}
         placeholder="Review Title"
+        value={reviewTitle}
       ></InputBase>
 
       {/* Review Body & Send */}
@@ -122,6 +137,7 @@ function CreateReviewCard({ movieId }) {
           maxRows="5"
           sx={{ paddingLeft: ".5rem", paddingRight: ".5rem", width: "100%" }}
           placeholder="Write a Review..."
+          value={review}
         ></InputBase>
         <IconButton
           onClick={() => {
