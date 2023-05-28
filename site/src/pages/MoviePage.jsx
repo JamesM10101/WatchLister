@@ -23,13 +23,16 @@ function MoviePage(props) {
   useEffect(() => {
     // get the movie from backend
     const getMovie = async () => {
-      await fetch(`http://localhost:3001/movies/${movieId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }).then(async (res) => {
+      await fetch(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/movies/${movieId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(async (res) => {
         if (res.status === 200) {
           setMovie(await res.json())
         } else {

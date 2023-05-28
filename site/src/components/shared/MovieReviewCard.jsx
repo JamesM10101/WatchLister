@@ -29,13 +29,16 @@ function MovieReviewCard({ movie, reviewId, token }) {
   const palette = useTheme().palette
 
   const getReview = async () => {
-    await fetch(`http://localhost:3001/reviews/${reviewId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
+    await fetch(
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(async (res) => {
       if (res.status === 200) {
         const result = await res.json()
         setReview(result)
@@ -52,14 +55,17 @@ function MovieReviewCard({ movie, reviewId, token }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleLikeDislike = async (requestType) => {
-    await fetch(`http://localhost:3001/reviews/${reviewId}/${requestType}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        userId: user._id,
-      },
-    }).then(async (res) => {
+    await fetch(
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}/${requestType}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          userId: user._id,
+        },
+      }
+    ).then(async (res) => {
       if (res.status === 200) {
         const updatedReview = await res.json()
         setReview(updatedReview)
@@ -70,14 +76,17 @@ function MovieReviewCard({ movie, reviewId, token }) {
   }
 
   const deleteReview = async () => {
-    await fetch(`http://localhost:3001/reviews/${reviewId}/delete`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        userId: user._id,
-      },
-    }).then(async (res) => {
+    await fetch(
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}/delete`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          userId: user._id,
+        },
+      }
+    ).then(async (res) => {
       if (res.status === 200) {
         setSeverity("success")
         setAlertMsg("Review Deleted")

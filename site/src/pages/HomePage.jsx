@@ -27,13 +27,16 @@ const HomePage = () => {
     let movies = []
 
     for (let id of movieIds) {
-      await fetch(`http://localhost:3001/movies/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }).then(async (res) => movies.push(await res.json()))
+      await fetch(
+        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/movies/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then(async (res) => movies.push(await res.json()))
     }
 
     dispatch(setMovies({ movies: movies }))
