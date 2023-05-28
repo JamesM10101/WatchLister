@@ -11,11 +11,13 @@ import {
 } from "@mui/icons-material"
 import { Alert, Box, Card, IconButton, Typography } from "@mui/material"
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
 import CreateReviewCard from "../shared/CreateReviewCard.jsx"
+import { setNeedAuthForm } from "../../state/state.js"
 
 function MovieReviewCard({ movie, reviewId, token }) {
+  const dispatch = useDispatch()
   const [review, setReview] = useState({})
   const [severity, setSeverity] = useState("")
   const [alertMsg, setAlertMsg] = useState("")
@@ -198,7 +200,11 @@ function MovieReviewCard({ movie, reviewId, token }) {
         {/* Like */}
         <Box
           onClick={() => {
-            toggleLikeDislike("like")
+            if (user) {
+              toggleLikeDislike("like")
+            } else {
+              dispatch(setNeedAuthForm())
+            }
           }}
           paddingRight=".5rem"
           sx={{
@@ -231,7 +237,11 @@ function MovieReviewCard({ movie, reviewId, token }) {
         {/* Dislike */}
         <Box
           onClick={() => {
-            toggleLikeDislike("dislike")
+            if (user) {
+              toggleLikeDislike("dislike")
+            } else {
+              dispatch(setNeedAuthForm())
+            }
           }}
           paddingRight=".5rem"
           sx={{
