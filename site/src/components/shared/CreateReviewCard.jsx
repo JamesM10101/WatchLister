@@ -43,7 +43,7 @@ function CreateReviewCard({
           if (rating === i + 1) setRating(0)
           else setRating(i + 1)
         }}
-        sx={{ color: rating > i || rating > pRating ? "#FFD700" : "" }}
+        sx={{ color: rating > i ? "#FFD700" : "" }}
       />
     )
   }
