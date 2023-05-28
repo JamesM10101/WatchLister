@@ -36,7 +36,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
         "Content-Type": "application/json",
       },
     }).then(async (res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         const result = await res.json()
         setReview(result)
         if (user && result) {
@@ -60,7 +60,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
         userId: user._id,
       },
     }).then(async (res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         const updatedReview = await res.json()
         setReview(updatedReview)
         setIsLiked(updatedReview.likes[user._id])
@@ -78,7 +78,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
         userId: user._id,
       },
     }).then(async (res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         setSeverity("success")
         setAlertMsg("Review Deleted")
       } else {

@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react"
+import { useState } from "react"
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material"
 import { ArrowBack, ArrowForward } from "@mui/icons-material"
 import MovieCard from "./MovieCard"

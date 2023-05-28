@@ -68,7 +68,7 @@ function AuthForm() {
       }
     )
 
-    if (registerUserResponse.status == 201) {
+    if (registerUserResponse.status === 201) {
       setIsLogin(true)
       onSubmitProps.resetForm()
     }
@@ -88,7 +88,7 @@ function AuthForm() {
     // if login was successful reload the page
     const loggedIn = await loginUserResponse.json()
 
-    if (loginUserResponse.status == 200) {
+    if (loginUserResponse.status === 200) {
       dispatch(
         setLogin({
           user: loggedIn.user,
