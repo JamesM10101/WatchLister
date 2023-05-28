@@ -138,8 +138,11 @@ function MoviePage(props) {
                     }}
                     allowFullScreen={true}
                     title={`${movie.title + " trailer"}`}
-                    src={`https://www.youtube.com/embed/${"O1M_iqSBEpA"}`}
-                    // src={`https://www.youtube.com/embed/${movie.trailerId}
+                    src={
+                      movie.trailerId
+                        ? `https://www.youtube.com/embed/${movie.trailerId}`
+                        : "https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    }
                   />
                 </div>
               </div>

@@ -133,25 +133,21 @@ function MovieReviewCard({ movie, reviewId, token }) {
           </Typography>
         </Typography>
 
-        <Box>
-          {/* Delete Button */}
+        <div>
+          {/* Delete & Edit Buttons */}
           {user
             ? review.userId === user._id && (
-                <IconButton onClick={alertDeletion}>
-                  <Delete />
-                </IconButton>
+                <>
+                  <IconButton onClick={alertDeletion}>
+                    <Delete />
+                  </IconButton>
+                  <IconButton onClick={() => setIsReviewEdit(true)}>
+                    <Edit />
+                  </IconButton>
+                </>
               )
             : ""}
-
-          {/* Edit Button */}
-          {user
-            ? review.userId === user._id && (
-                <IconButton onClick={() => setIsReviewEdit(true)}>
-                  <Edit />
-                </IconButton>
-              )
-            : ""}
-        </Box>
+        </div>
       </FlexBetween>
 
       {/* Review Title */}
