@@ -14,7 +14,7 @@ import { verifyToken } from "../middleware/auth.js"
 const reviewRouter = express.Router()
 
 // create
-reviewRouter.get("/:id/create", verifyToken, createReview)
+reviewRouter.post("/:id/create", verifyToken, createReview)
 
 // read
 reviewRouter.get("/:id", getReview)
@@ -23,7 +23,7 @@ reviewRouter.get("/:id/movie", getAllMovieReviews)
 
 // update
 reviewRouter.patch("/:id/like", verifyToken, toggleLikeReview)
-reviewRouter.patch("/:id/like", verifyToken, toggleDislikeReview)
+reviewRouter.patch("/:id/dislike", verifyToken, toggleDislikeReview)
 reviewRouter.patch("/:id/edit", verifyToken, editReview)
 
 // delete

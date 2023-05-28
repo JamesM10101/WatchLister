@@ -8,8 +8,11 @@ export const createReview = async (req, res) => {
     // movie id
     const { id } = req.params
 
+    // user id
+    const userId = req.header("userId")
+
     // review data
-    const { userId, title, rating, description } = req.body
+    const { title, rating, description } = req.body
 
     // create and save the review
     const formattedReview = new Review({
@@ -25,8 +28,13 @@ export const createReview = async (req, res) => {
 
     // update the movie with the new review's id
     const movie = await Movie.findById(id)
-    movie.reviews.push(id)
+    movie.reviews.push(newReview._id)
     await movie.save()
+
+    // update the user with their new review
+    const user = await User.findById(userId)
+    user.reviews.push(newReview._id)
+    await user.save()
 
     // return the new review
     res.status(201).json(newReview)
@@ -90,7 +98,7 @@ export const toggleLikeReview = async (req, res) => {
   try {
     // review id and user id
     const { id } = req.params
-    const { userId } = req.body
+    const userId = req.header("userId")
 
     // review
     const user = await User.findById(userId)
@@ -117,7 +125,7 @@ export const toggleLikeReview = async (req, res) => {
     if (isLiked) {
       user.likes.delete(updatedReview._id)
     } else {
-      user.likes.push(updatedReview._id)
+      user.likes.set(updatedReview._id, true)
     }
 
     // saved the updated user
@@ -135,7 +143,7 @@ export const toggleDislikeReview = async (req, res) => {
   try {
     // review id and user id
     const { id } = req.params
-    const { userId } = req.body
+    const userId = req.header("userId")
 
     // review
     const user = await User.findById(userId)
@@ -178,9 +186,9 @@ export const editReview = async (req, res) => {
     const updatedReview = await Review.findByIdAndUpdate(
       id,
       {
-        title,
-        rating,
-        description,
+        title: title,
+        rating: rating,
+        description: description,
       },
       { new: true }
     )
@@ -198,7 +206,7 @@ export const deleteReview = async (req, res) => {
   try {
     // review id and user id
     const { id } = req.params
-    const { userId } = req.body
+    const userId = req.header("userId")
 
     // user and reviewer id
     const user = await User.findById(userId)
