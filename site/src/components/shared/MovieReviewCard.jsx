@@ -1,6 +1,14 @@
 import { useTheme } from "@emotion/react"
-import { Edit, Star } from "@mui/icons-material"
-import { Card, IconButton, Typography } from "@mui/material"
+import {
+  Circle,
+  Edit,
+  Star,
+  ThumbDownAlt,
+  ThumbDownAltOutlined,
+  ThumbUpAlt,
+  ThumbUpAltOutlined,
+} from "@mui/icons-material"
+import { Box, Card, IconButton, Typography } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
@@ -8,6 +16,8 @@ import CreateReviewCard from "../shared/CreateReviewCard.jsx"
 
 function MovieReviewCard({ movie, reviewId, token }) {
   const [review, setReview] = useState({})
+  const [isLiked, setIsLiked] = useState(false)
+  const [isDisliked, setIsDisliked] = useState(false)
   const [showFullDesc, setShowFullDesc] = useState(false)
   const [isReviewEdit, setIsReviewEdit] = useState(false)
   const user = useSelector((state) => state.user)
@@ -21,13 +31,36 @@ function MovieReviewCard({ movie, reviewId, token }) {
         "Content-Type": "application/json",
       },
     }).then(async (res) => {
-      setReview(await res.json())
+      const result = await res.json()
+      setReview(result)
+      if (user) {
+        setIsLiked(result.likes[user._id])
+        setIsDisliked(result.dislikes[user._id])
+      }
     })
   }
 
   useEffect(() => {
     getReview()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleLikeDislike = async (requestType) => {
+    await fetch(`http://localhost:3001/reviews/${reviewId}/${requestType}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        userId: user._id,
+      },
+    }).then(async (res) => {
+      if (res.status == 200) {
+        const updatedReview = await res.json()
+        setReview(updatedReview)
+        setIsLiked(updatedReview.likes[user._id])
+        setIsDisliked(updatedReview.dislikes[user._id])
+      }
+    })
+  }
 
   return isReviewEdit ? (
     <CreateReviewCard
@@ -96,7 +129,6 @@ function MovieReviewCard({ movie, reviewId, token }) {
       {/* Review Description */}
       <Typography
         onClick={() => setShowFullDesc(!showFullDesc)}
-        paddingBottom=".3rem"
         paddingLeft=".5rem"
         paddingRight=".5rem"
         sx={{
@@ -113,6 +145,78 @@ function MovieReviewCard({ movie, reviewId, token }) {
       >
         {review.description ? review.description : ""}
       </Typography>
+
+      {/* Like/Dislike */}
+      <Box
+        margin=".5rem"
+        marginBottom=".1rem"
+        display="flex"
+        flexDirection="row"
+      >
+        {/* Like */}
+        <Box
+          onClick={() => {
+            toggleLikeDislike("like")
+          }}
+          paddingRight=".5rem"
+          sx={{
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+        >
+          {user ? (
+            isLiked ? (
+              <ThumbUpAlt />
+            ) : (
+              <ThumbUpAltOutlined />
+            )
+          ) : (
+            <ThumbUpAltOutlined />
+          )}
+        </Box>
+
+        <Typography>
+          {review.likes
+            ? Object.keys(review.likes).length
+              ? Object.keys(review.likes).length
+              : 0
+            : 0}
+        </Typography>
+
+        <Circle sx={{ scale: ".2" }} />
+
+        {/* Dislike */}
+        <Box
+          onClick={() => {
+            toggleLikeDislike("dislike")
+          }}
+          paddingRight=".5rem"
+          sx={{
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+        >
+          {user ? (
+            isDisliked ? (
+              <ThumbDownAlt />
+            ) : (
+              <ThumbDownAltOutlined />
+            )
+          ) : (
+            <ThumbDownAltOutlined />
+          )}
+        </Box>
+
+        <Typography>
+          {review.dislikes
+            ? Object.keys(review.dislikes).length
+              ? Object.keys(review.dislikes).length
+              : 0
+            : 0}
+        </Typography>
+      </Box>
     </Card>
   )
 }
