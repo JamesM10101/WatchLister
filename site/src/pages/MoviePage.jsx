@@ -63,7 +63,9 @@ function MoviePage(props) {
       <Box
         position="absolute"
         width="100%"
-        height="auto"
+        height={
+          movie.reviews ? (movie.reviews.length ? "100%" : "auto") : "auto"
+        }
         sx={{
           zIndex: -99,
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -83,7 +85,7 @@ function MoviePage(props) {
             {/* Movie Title */}
             <Box>
               <Typography variant="h1" fontWeight="bold" color="white">
-                {movie.title}
+                {movie.title ? movie.title : ""}
               </Typography>
             </Box>
 
