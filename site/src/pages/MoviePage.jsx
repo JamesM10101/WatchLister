@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router-dom"
 import FlexBetween from "../components/shared/FlexBetween.jsx"
 import CreateReviewCard from "../components/shared/CreateReviewCard.jsx"
 import MovieReviewCard from "../components/shared/MovieReviewCard.jsx"
+import BrokenMoviePage from "../components/BrokenMovie.jsx"
 
 function MoviePage(props) {
   const { movieId } = useParams()
@@ -15,6 +16,8 @@ function MoviePage(props) {
 
   const [movie, setMovie] = useState({})
   const [isStaffVis, setIsStaffVis] = useState(false)
+  const [isPageLoading, setIsPageLoading] = useState(true)
+  const [isPageBroken, setIsPageBroken] = useState(false)
   const [reviewCount, setReviewCount] = useState(5)
 
   useEffect(() => {
@@ -30,20 +33,26 @@ function MoviePage(props) {
         if (res.status === 200) {
           setMovie(await res.json())
         } else {
-          // todo -- indicate page broken
+          setIsPageBroken(true)
         }
+        setIsPageLoading(false)
       })
     }
 
     // check the movie was passed in
     if (state) {
       setMovie(state.movie)
+      setIsPageLoading(false)
     } else {
       getMovie()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
+  return isPageLoading ? (
+    <></>
+  ) : isPageBroken ? (
+    <BrokenMoviePage />
+  ) : (
     <Box w="100%" h="100%">
       {/* Background Image */}
       <img
