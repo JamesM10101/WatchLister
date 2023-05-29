@@ -24,7 +24,7 @@ function MoviePage(props) {
     // get the movie from backend
     const getMovie = async () => {
       await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/movies/${movieId}`,
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/${movieId}`,
         {
           method: "GET",
           headers: {
@@ -154,7 +154,7 @@ function MoviePage(props) {
                     src={
                       movie.trailerId
                         ? `https://www.youtube.com/embed/${movie.trailerId}`
-                        : "https://www.youtube.com/embed/dQw4w9WgXcQ"
+                        : "https://www.youtube.com/embed/jNQXAC9IVRw"
                     }
                   />
                 </div>

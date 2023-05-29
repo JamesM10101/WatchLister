@@ -57,7 +57,7 @@ function CreateReviewCard({
     }
 
     await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${
         edit ? reviewId : movieId
       }/${edit ? "edit" : "create"}`,
       {

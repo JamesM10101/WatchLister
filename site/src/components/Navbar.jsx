@@ -144,7 +144,7 @@ function Navbar() {
               <Avatar
                 alt="profile"
                 sx={{ bgcolor: palette.neutral.dark }}
-                src={`http://localhost:${process.env.SERVER_PORT}/assets/${user.picturePath}`}
+                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/assets/${user.picturePath}`}
               />
             ) : user ? (
               <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>

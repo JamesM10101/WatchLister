@@ -61,7 +61,7 @@ function AuthForm() {
 
     // register user on backend
     const registerUserResponse = await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/register`,
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/auth/register`,
       {
         method: "POST",
         body: formData,
@@ -77,7 +77,7 @@ function AuthForm() {
   const authUser = async (values, onSubmitProps) => {
     // register the user
     const loginUserResponse = await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/auth/login`,
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/auth/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

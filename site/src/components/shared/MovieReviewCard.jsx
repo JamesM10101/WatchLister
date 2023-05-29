@@ -32,7 +32,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
 
   const getReview = async () => {
     await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}`,
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}`,
       {
         method: "GET",
         headers: {
@@ -54,15 +54,12 @@ function MovieReviewCard({ movie, reviewId, token }) {
   }
 
   const getReviewer = async (userId) => {
-    await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/users/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(async (res) => {
+    await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(async (res) => {
       if (res.status === 200) {
         setReviewer(await res.json())
       }
@@ -75,7 +72,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
 
   const toggleLikeDislike = async (requestType) => {
     await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}/${requestType}`,
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}/${requestType}`,
       {
         method: "PATCH",
         headers: {
@@ -96,7 +93,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
 
   const deleteReview = async () => {
     await fetch(
-      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/reviews/${reviewId}/delete`,
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}/delete`,
       {
         method: "DELETE",
         headers: {
@@ -160,7 +157,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
               <Avatar
                 alt="profile"
                 sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
-                src={`http://localhost:${process.env.SERVER_PORT}/assets/${reviewer.picturePath}`}
+                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/assets/${reviewer.picturePath}`}
               />
             ) : (
               <Avatar
