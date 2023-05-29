@@ -3,22 +3,24 @@ import {
   Circle,
   Delete,
   Edit,
-  Star,
+  StarOutline,
   ThumbDownAlt,
   ThumbDownAltOutlined,
   ThumbUpAlt,
   ThumbUpAltOutlined,
 } from "@mui/icons-material"
-import { Alert, Box, Card, IconButton, Typography } from "@mui/material"
+import { Alert, Avatar, Box, Card, IconButton, Typography } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
 import CreateReviewCard from "../shared/CreateReviewCard.jsx"
 import { setNeedAuthForm } from "../../state/state.js"
+import { Link } from "react-router-dom"
 
 function MovieReviewCard({ movie, reviewId, token }) {
   const dispatch = useDispatch()
   const [review, setReview] = useState({})
+  const [reviewer, setReviewer] = useState({})
   const [severity, setSeverity] = useState("")
   const [alertMsg, setAlertMsg] = useState("")
   const [isLiked, setIsLiked] = useState(false)
@@ -42,10 +44,27 @@ function MovieReviewCard({ movie, reviewId, token }) {
       if (res.status === 200) {
         const result = await res.json()
         setReview(result)
+        getReviewer(result.userId)
         if (user && result) {
           setIsLiked(result.likes[user._id])
           setIsDisliked(result.dislikes[user._id])
         }
+      }
+    })
+  }
+
+  const getReviewer = async (userId) => {
+    await fetch(
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}/users/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(async (res) => {
+      if (res.status === 200) {
+        setReviewer(await res.json())
       }
     })
   }
@@ -115,7 +134,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
       setIsReviewEdit={setIsReviewEdit}
       setReviewForMovie={setReview}
     />
-  ) : review ? (
+  ) : review !== {} && reviewer != {} ? (
     <Card
       width="100%"
       sx={{
@@ -123,40 +142,72 @@ function MovieReviewCard({ movie, reviewId, token }) {
         backgroundColor: palette.background.alt,
       }}
     >
-      <FlexBetween>
-        {/* Review Score */}
-        <Typography
-          padding=".5rem"
-          paddingBottom="0rem"
+      <FlexBetween margin=".5rem" marginBottom="0rem">
+        {/* User Profile & Name */}
+        <Link
+          to={`/profile/${reviewer._id}`}
+          style={{ textDecoration: "none" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="row"
+            position="relative"
+            gap=".5rem"
+            alignItems="center"
+          >
+            {/* Profile */}
+            {reviewer.picturePath !== "undefined" ? (
+              <Avatar
+                alt="profile"
+                sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
+                src={`http://localhost:${process.env.SERVER_PORT}/assets/${reviewer.picturePath}`}
+              />
+            ) : (
+              <Avatar
+                alt="profile"
+                sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
+              >
+                {reviewer.username ? reviewer.username[0] : ""}
+              </Avatar>
+            )}
+
+            {/* Name */}
+            <Typography fontSize="1rem" color={palette.neutral.dark}>
+              {reviewer.username ? reviewer.username : "Anonymous"}
+            </Typography>
+          </Box>
+        </Link>
+
+        {/* Rating */}
+        <Card
           sx={{
-            position: "relative",
-            gap: ".2rem",
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
+            padding: ".2rem",
+            paddingBottom: "0rem",
+            paddingTop: "0rem",
+            backgroundColor: "#FFD700",
           }}
         >
-          <Star sx={{ marginBottom: ".2rem", scale: "1", color: "#FFD700" }} />
-          <Typography marginLeft=".1rem" fontSize="1rem">
-            {review.rating ? review.rating + "/5" : "-/5"}
+          <Typography
+            sx={{
+              position: "relative",
+              gap: ".2rem",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            <StarOutline
+              sx={{
+                marginBottom: ".1rem",
+                scale: "1.1",
+                color: "black",
+              }}
+            />
+            <Typography fontSize="1.1rem" color="black">
+              {review.rating ? review.rating : "-"}
+            </Typography>
           </Typography>
-        </Typography>
-
-        <div>
-          {/* Delete & Edit Buttons */}
-          {user
-            ? review.userId === user._id && (
-                <>
-                  <IconButton onClick={alertDeletion}>
-                    <Delete />
-                  </IconButton>
-                  <IconButton onClick={() => setIsReviewEdit(true)}>
-                    <Edit />
-                  </IconButton>
-                </>
-              )
-            : ""}
-        </div>
+        </Card>
       </FlexBetween>
 
       {/* Review Title */}
@@ -196,84 +247,102 @@ function MovieReviewCard({ movie, reviewId, token }) {
       </Typography>
 
       {/* Like/Dislike */}
-      <Box
-        margin=".5rem"
-        marginBottom=".1rem"
-        display="flex"
-        flexDirection="row"
-      >
-        {/* Like */}
+      <FlexBetween>
         <Box
-          onClick={() => {
-            if (user) {
-              toggleLikeDislike("like")
-            } else {
-              dispatch(setNeedAuthForm())
-            }
-          }}
-          paddingRight=".5rem"
-          sx={{
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
+          margin=".5rem"
+          marginBottom=".1rem"
+          display="flex"
+          flexDirection="row"
         >
-          {user ? (
-            isLiked ? (
-              <ThumbUpAlt />
+          {/* Like */}
+          <Box
+            onClick={() => {
+              if (user) {
+                toggleLikeDislike("like")
+              } else {
+                dispatch(setNeedAuthForm())
+              }
+            }}
+            paddingRight=".5rem"
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          >
+            {user ? (
+              isLiked ? (
+                <ThumbUpAlt />
+              ) : (
+                <ThumbUpAltOutlined />
+              )
             ) : (
               <ThumbUpAltOutlined />
-            )
-          ) : (
-            <ThumbUpAltOutlined />
-          )}
-        </Box>
+            )}
+          </Box>
 
-        <Typography>
-          {review.likes
-            ? Object.keys(review.likes).length
+          <Typography>
+            {review.likes
               ? Object.keys(review.likes).length
-              : 0
-            : 0}
-        </Typography>
+                ? Object.keys(review.likes).length
+                : 0
+              : 0}
+          </Typography>
 
-        <Circle sx={{ scale: ".2" }} />
+          <Circle sx={{ scale: ".2" }} />
 
-        {/* Dislike */}
-        <Box
-          onClick={() => {
-            if (user) {
-              toggleLikeDislike("dislike")
-            } else {
-              dispatch(setNeedAuthForm())
-            }
-          }}
-          paddingRight=".5rem"
-          sx={{
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
-        >
-          {user ? (
-            isDisliked ? (
-              <ThumbDownAlt />
+          {/* Dislike */}
+          <Box
+            onClick={() => {
+              if (user) {
+                toggleLikeDislike("dislike")
+              } else {
+                dispatch(setNeedAuthForm())
+              }
+            }}
+            paddingRight=".5rem"
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          >
+            {user ? (
+              isDisliked ? (
+                <ThumbDownAlt />
+              ) : (
+                <ThumbDownAltOutlined />
+              )
             ) : (
               <ThumbDownAltOutlined />
-            )
-          ) : (
-            <ThumbDownAltOutlined />
-          )}
+            )}
+          </Box>
+
+          <Typography>
+            {review.dislikes
+              ? Object.keys(review.dislikes).length
+                ? Object.keys(review.dislikes).length
+                : 0
+              : 0}
+          </Typography>
         </Box>
 
-        <Typography>
-          {review.dislikes
-            ? Object.keys(review.dislikes).length
-              ? Object.keys(review.dislikes).length
-              : 0
-            : 0}
-        </Typography>
-      </Box>
+        <div>
+          {/* Delete & Edit Buttons */}
+          {user
+            ? review.userId === user._id && (
+                <>
+                  <IconButton onClick={alertDeletion}>
+                    <Delete />
+                  </IconButton>
+                  <IconButton onClick={() => setIsReviewEdit(true)}>
+                    <Edit />
+                  </IconButton>
+                </>
+              )
+            : ""}
+        </div>
+      </FlexBetween>
 
       {severity && (
         <Alert severity={severity}>
