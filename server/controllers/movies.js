@@ -78,6 +78,7 @@ export const getMovie = async (req, res) => {
 export const updateMovieDetails = async (req, res) => {
   try {
     const { id } = req.params
+    const userId = req.header("userId")
     const {
       title,
       description,
@@ -89,21 +90,27 @@ export const updateMovieDetails = async (req, res) => {
       director,
       actors,
     } = req.body
-    const movie = await Movie.findById(id)
 
-    // update movie details
-    movie.title = title
-    movie.description = description
-    movie.imagePath = imagePath
-    movie.releaseDate = releaseDate
-    movie.runtime = runtime
-    movie.mpaRating = mpaRating
-    movie.genre = genre
-    movie.director = director
-    movie.actors = actors
+    // check user is an admin
+    const user = await User.findById(userId)
+    if (!user.admin) return res.status(401).json({ error: "Unauthorized User" })
 
-    // save the updated movie
-    const updatedMovie = await movie.save()
+    // update the movie
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      id,
+      {
+        title: title,
+        description: description,
+        imagePath: imagePath,
+        releaseDate: releaseDate,
+        runtime: runtime,
+        mpaRating: mpaRating,
+        genre: genre,
+        director: director,
+        actors: actors,
+      },
+      { new: true }
+    )
 
     // return the updated movie
     res.status(200).json(updatedMovie)

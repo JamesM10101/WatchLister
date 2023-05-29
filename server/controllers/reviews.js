@@ -223,12 +223,26 @@ export const deleteReview = async (req, res) => {
     // delete the review
     const result = await Review.findByIdAndDelete(id)
 
+    // remove the review from the movie
+    await Movie.findByIdAndUpdate(review.movieId, {
+      $pull: {
+        reviews: review._id,
+      },
+    })
+
+    // remove the review from the users profile
+    await User.findByIdAndUpdate(user._id, {
+      $pull: {
+        reviews: review._id,
+      },
+    })
+
     // remove the liked review from all users likes
-    User.updateMany(
-      { likes: review._id },
+    await User.updateMany(
+      { ["likes." + review._id]: true },
       {
-        $pull: {
-          likes: review._id,
+        $unset: {
+          ["likes." + review._id]: "",
         },
       }
     )

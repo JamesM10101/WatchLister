@@ -10,6 +10,13 @@ export const getUser = async (req, res) => {
     const { id } = req.params
     const user = await User.findById(id)
 
+    // delete user sensitive data
+    user.password = undefined
+    user.email = undefined
+    user.savedMovies = undefined
+    user.likes = undefined
+    user.admin = undefined
+
     // return the user
     res.status(200).json(user)
   } catch (err) {
