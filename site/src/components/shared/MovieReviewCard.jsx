@@ -134,7 +134,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
       setIsReviewEdit={setIsReviewEdit}
       setReviewForMovie={setReview}
     />
-  ) : review !== {} && reviewer != {} ? (
+  ) : review && review !== {} && reviewer !== {} ? (
     <Card
       width="100%"
       sx={{
