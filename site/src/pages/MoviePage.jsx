@@ -75,7 +75,7 @@ function MoviePage(props) {
         position="absolute"
         width="100%"
         height={
-          movie.reviews ? (movie.reviews.length ? "100%" : "auto") : "auto"
+          movie.reviews ? (movie.reviews.length ? "100%" : "100%") : "auto"
         }
         sx={{
           zIndex: -99,
@@ -123,6 +123,7 @@ function MoviePage(props) {
               <img
                 src={movie.imagePath}
                 width={"30%"}
+                draggable="false"
                 style={{ zIndex: 2 }}
                 alt={`${movie.title} poster`}
               />
@@ -346,9 +347,7 @@ function MoviePage(props) {
                       },
                     }}
                   >
-                    <Typography color="white" fontSize="1rem">
-                      Show More
-                    </Typography>
+                    <Typography fontSize="1rem">Show More</Typography>
                   </Box>
                 ) : (
                   <></>
