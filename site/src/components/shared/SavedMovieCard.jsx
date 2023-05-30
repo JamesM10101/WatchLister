@@ -61,15 +61,14 @@ function SavedMovieCard({ movieId, token }) {
   return Object.keys(movie).length === 0 ? (
     <></>
   ) : (
-    <Card
-      width="100%"
-      sx={{
-        padding: ".5rem",
-        borderRadius: ".5rem",
-        backgroundColor: palette.background.alt,
-      }}
-    >
-      <FlexBetween>
+    <Card width="100%">
+      <FlexBetween
+        sx={{
+          padding: ".5rem",
+          borderRadius: ".5rem",
+          backgroundColor: palette.background.alt,
+        }}
+      >
         {/* Movie Poster & Title */}
         <Link to={`/movie/${movie._id}`} style={{ textDecoration: "none" }}>
           <Box
@@ -132,9 +131,15 @@ function SavedMovieCard({ movieId, token }) {
           }}
         >
           {isSaved ? (
-            <Bookmark sx={{ color: "#FFD700" }} />
+            <Bookmark sx={{ color: "#FFD700", width: 32, height: 32 }} />
           ) : (
-            <BookmarkBorder sx={{ color: mode === "dark" ? "" : "black" }} />
+            <BookmarkBorder
+              sx={{
+                color: mode === "dark" ? "" : "black",
+                width: 32,
+                height: 32,
+              }}
+            />
           )}
         </IconButton>
       </FlexBetween>
