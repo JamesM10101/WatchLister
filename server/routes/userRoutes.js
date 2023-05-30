@@ -5,6 +5,7 @@ import {
   getLikedReviews,
   getReviewedMovies,
   updateUser,
+  toggleMovieSaved,
 } from "../controllers/users.js"
 import { verifyToken } from "../middleware/auth.js"
 
@@ -18,5 +19,6 @@ userRouter.get("/:id/reviews", getReviewedMovies)
 
 // update
 userRouter.patch("/:id/update", verifyToken, updateUser)
+userRouter.patch("/:movieId/saveMovie", verifyToken, toggleMovieSaved)
 
 export default userRouter

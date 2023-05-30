@@ -174,3 +174,41 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 }
+
+export const toggleMovieSaved = async (req, res) => {
+  try {
+    const { movieId } = req.params
+    const userId = req.header("userId")
+
+    let user = await User.findById(userId)
+    const index = user.savedMovies.indexOf(`${movieId}`)
+
+    // ensure user is authorized
+    if (userId != user._id) {
+      return res.status(403).json({ error: "Unauthorized user" })
+    }
+
+    // remove movie is not saved, add it otherwise
+    if (index >= 0) {
+      user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: {
+            savedMovies: movieId,
+          },
+        },
+        { new: true }
+      )
+    } else {
+      user.savedMovies.push(movieId)
+      await user.save()
+    }
+
+    user.password = undefined
+
+    res.status(201).json(user)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
