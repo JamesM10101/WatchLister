@@ -1,26 +1,40 @@
-import { Circle, ExpandMore, Star } from "@mui/icons-material"
-import { Box, Chip, Typography, useMediaQuery } from "@mui/material"
+import {
+  Bookmark,
+  BookmarkBorder,
+  Circle,
+  ExpandMore,
+  Star,
+} from "@mui/icons-material"
+import { Box, Chip, IconButton, Typography, useMediaQuery } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useParams } from "react-router-dom"
 import FlexBetween from "../components/shared/FlexBetween.jsx"
 import CreateReviewCard from "../components/shared/CreateReviewCard.jsx"
 import MovieReviewCard from "../components/shared/MovieReviewCard.jsx"
 import BrokenMoviePage from "../components/BrokenMovie.jsx"
+import { setNeedAuthForm, setUser } from "../state/state.js"
 
-function MoviePage(props) {
+function MoviePage() {
   const { movieId } = useParams()
+  const dispatch = useDispatch()
   const state = useLocation().state
   const token = useSelector((state) => state.token)
   const isFullSizeScreen = useMediaQuery("(min-width: 1000px)")
 
   const [movie, setMovie] = useState({})
+  const [isSaved, setIsSaved] = useState(false)
   const [isStaffVis, setIsStaffVis] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(true)
   const [isPageBroken, setIsPageBroken] = useState(false)
   const [reviewCount, setReviewCount] = useState(5)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
+    if (user) {
+      if (user.savedMovies.includes(movieId)) setIsSaved(true)
+    }
+
     // get the movie from backend
     const getMovie = async () => {
       await fetch(
@@ -50,6 +64,26 @@ function MoviePage(props) {
       getMovie()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleMovieSaved = async () => {
+    await fetch(
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${movieId}/saveMovie`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          userId: user._id,
+        },
+      }
+    ).then(async (res) => {
+      if (res.status === 201) {
+        dispatch(setUser({ user: await res.json() }))
+        setIsSaved(!isSaved)
+      } else {
+      }
+    })
+  }
 
   return isPageLoading ? (
     <></>
@@ -94,11 +128,45 @@ function MoviePage(props) {
             sx={{ zIndex: 10 }}
           >
             {/* Movie Title */}
-            <Box>
-              <Typography variant="h1" fontWeight="bold" color="white">
+            <FlexBetween>
+              <Typography
+                variant="h1"
+                fontWeight="bold"
+                color="white"
+                sx={{
+                  wordWrap: "break-word",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
                 {movie.title ? movie.title : ""}
               </Typography>
-            </Box>
+
+              <IconButton
+                onClick={() => {
+                  if (user) {
+                    toggleMovieSaved()
+                  } else {
+                    dispatch(setNeedAuthForm())
+                  }
+                }}
+              >
+                {isSaved ? (
+                  <Bookmark sx={{ color: "#FFD700", width: 36, height: 36 }} />
+                ) : (
+                  <BookmarkBorder
+                    sx={{
+                      color: "white",
+                      width: 36,
+                      height: 36,
+                    }}
+                  />
+                )}
+              </IconButton>
+            </FlexBetween>
 
             {/* Movie Details */}
             <Box
