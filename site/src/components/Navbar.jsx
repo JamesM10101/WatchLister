@@ -4,7 +4,6 @@ import {
   Badge,
   IconButton,
   InputBase,
-  Popover,
   Typography,
   useMediaQuery,
   useTheme,
@@ -25,18 +24,13 @@ function Navbar() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
   const isFullSizeScreen = useMediaQuery("(min-width: 600px)")
+  const [isSearching, setIsSearching] = useState(false)
 
   // theme
   const palette = useTheme().palette
   const themeMode = palette.mode
 
-  // handle popover event -- cut from mui docs
-  const [anchorEl, setAnchorEl] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
-  const open = Boolean(anchorEl)
-  const id = open ? "simple-popover" : undefined
-  const handleClick = (event) => setAnchorEl(event.currentTarget)
-  const handleClose = () => setAnchorEl(null)
   const handleSearch = () => {
     // todo implement actual search here
     console.log("query: " + searchQuery)
@@ -64,33 +58,18 @@ function Navbar() {
         </Typography>
       </Link>
 
-      {/* Right Adjusted elements */}
-      <FlexBetween gap={isFullSizeScreen ? "1rem" : "0.1rem"}>
-        {/* Search Icon */}
-        <IconButton
-          onClick={handleClick}
-          sx={{ transform: "scale(1.3)", color: palette.neutral.dark }}
-        >
-          <Search />
-        </IconButton>
-
-        {/* Search Popover */}
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+      {isSearching ? (
+        <FlexBetween
+          width="50%"
+          borderRadius="1rem"
+          paddingLeft=".6rem"
+          paddingBottom=".2rem"
+          paddingTop=".2rem"
+          sx={{ backgroundColor: palette.background.default }}
+          onBlur={() => setIsSearching(false)}
         >
           <InputBase
-            sx={{ padding: ".5rem" }}
+            autoFocus={true}
             placeholder="Search..."
             onChange={(event) => {
               setSearchQuery(event.target.value)
@@ -100,75 +79,88 @@ function Navbar() {
                 handleSearch()
               }
             }}
+            sx={{}}
           />
-          <IconButton onClick={handleSearch}>
-            <Search />
-          </IconButton>
-        </Popover>
+        </FlexBetween>
+      ) : (
+        <>
+          {/* Right Adjusted elements */}
+          <FlexBetween gap={isFullSizeScreen ? "1rem" : "0.1rem"}>
+            {/* Search Icon */}
+            <IconButton
+              onClick={() => setIsSearching(true)}
+              sx={{ transform: "scale(1.3)", color: palette.neutral.dark }}
+            >
+              <Search />
+            </IconButton>
 
-        {/* Theme Mode */}
-        <IconButton
-          onClick={() => {
-            dispatch(setMode())
-          }}
-          sx={{ transform: "scale(1.3)" }}
-        >
-          {themeMode === "dark" ? (
-            <DarkModeOutlined />
-          ) : (
-            <LightModeOutlined sx={{ color: palette.neutral.dark }} />
-          )}
-        </IconButton>
+            {/* Theme Mode */}
+            <IconButton
+              onClick={() => {
+                dispatch(setMode())
+              }}
+              sx={{ transform: "scale(1.3)" }}
+            >
+              {themeMode === "dark" ? (
+                <DarkModeOutlined />
+              ) : (
+                <LightModeOutlined sx={{ color: palette.neutral.dark }} />
+              )}
+            </IconButton>
 
-        {/* Notications */}
-        {/* todo -- accurately set the badgeContent */}
-        <Badge color="secondary" badgeContent={0}>
-          <IconButton
-            // todo -- add some functionality to this button
-            onClick={() => {}}
-            sx={{ transform: "scale(1.3)" }}
-          >
-            {themeMode === "dark" ? (
-              <NotificationsOutlined />
+            {/* Notications */}
+            {/* todo -- accurately set the badgeContent */}
+            <Badge color="secondary" badgeContent={0}>
+              <IconButton
+                // todo -- add some functionality to this button
+                onClick={() => {}}
+                sx={{ transform: "scale(1.3)" }}
+              >
+                {themeMode === "dark" ? (
+                  <NotificationsOutlined />
+                ) : (
+                  <NotificationsOutlined sx={{ color: palette.neutral.dark }} />
+                )}
+              </IconButton>
+            </Badge>
+
+            {/* Set the user icon to the users image or first initial -- routes to account page */}
+            {user ? (
+              <Link
+                to={`/profile/${user._id}`}
+                style={{ textDecoration: "none" }}
+              >
+                {user.picturePath !== "undefined" ? (
+                  <Avatar
+                    alt="profile"
+                    sx={{ bgcolor: palette.neutral.dark }}
+                    src={`${process.env.REACT_APP_BACKEND_ADDRESS}/assets/${user.picturePath}`}
+                  />
+                ) : user ? (
+                  <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>
+                    {user.username[0]}
+                  </Avatar>
+                ) : (
+                  "" // how
+                )}
+              </Link>
             ) : (
-              <NotificationsOutlined sx={{ color: palette.neutral.dark }} />
-            )}
-          </IconButton>
-        </Badge>
-
-        {/* User Icon (WARNING: Nested Ternaries Ahead 🤮) */}
-        {/* Set the user icon to the users image or first initial -- routes to account page */}
-        {user ? (
-          <Link to={`/profile/${user._id}`} style={{ textDecoration: "none" }}>
-            {user.picturePath !== "undefined" ? (
+              // set the default profile image
               <Avatar
+                onClick={() => dispatch(setNeedAuthForm())}
                 alt="profile"
-                sx={{ bgcolor: palette.neutral.dark }}
-                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/assets/${user.picturePath}`}
+                src={defaultUserProfile}
+                sx={{
+                  bgcolor: palette.neutral.dark,
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
               />
-            ) : user ? (
-              <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>
-                {user.username[0]}
-              </Avatar>
-            ) : (
-              "" // how
             )}
-          </Link>
-        ) : (
-          // set the default profile image
-          <Avatar
-            onClick={() => dispatch(setNeedAuthForm())}
-            alt="profile"
-            src={defaultUserProfile}
-            sx={{
-              bgcolor: palette.neutral.dark,
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-          />
-        )}
-      </FlexBetween>
+          </FlexBetween>
+        </>
+      )}
     </FlexBetween>
   )
 }
