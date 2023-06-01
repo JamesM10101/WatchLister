@@ -5,16 +5,24 @@ import User from "../models/User.js"
 export const createMovie = async (req, res) => {
   try {
     // get the user with its id
-    const { userId } = req.body
+    const userId = req.header("userId")
+
     const {
       title,
-      description,
-      imagePath,
+      shortPlot,
+      longPlot,
+      posterPath,
+      backdropPath,
       releaseDate,
       runtime,
       mpaRating,
-      genre,
-      director,
+      boxOffice,
+      imdbId,
+      tmdbId,
+      trailer,
+      genres,
+      writers,
+      directors,
       actors,
     } = req.body
     const user = await User.findById(userId)
@@ -25,13 +33,20 @@ export const createMovie = async (req, res) => {
     // create and save the movie
     const formattedMovie = new Movie({
       title,
-      description,
-      imagePath,
+      shortPlot,
+      longPlot,
+      posterPath,
+      backdropPath,
       releaseDate,
       runtime,
       mpaRating,
-      genre,
-      director,
+      boxOffice,
+      imdbId,
+      tmdbId,
+      trailer,
+      genres,
+      writers,
+      directors,
       actors,
     })
     const newMovie = await formattedMovie.save()
@@ -81,13 +96,20 @@ export const updateMovieDetails = async (req, res) => {
     const userId = req.header("userId")
     const {
       title,
-      description,
-      imagePath,
+      shortPlot,
+      longPlot,
+      posterPath,
+      backdropPath,
       releaseDate,
       runtime,
       mpaRating,
-      genre,
-      director,
+      boxOffice,
+      imdbId,
+      tmdbId,
+      trailer,
+      genres,
+      writers,
+      directors,
       actors,
     } = req.body
 
@@ -99,15 +121,22 @@ export const updateMovieDetails = async (req, res) => {
     const updatedMovie = await Movie.findByIdAndUpdate(
       id,
       {
-        title: title,
-        description: description,
-        imagePath: imagePath,
-        releaseDate: releaseDate,
-        runtime: runtime,
-        mpaRating: mpaRating,
-        genre: genre,
-        director: director,
-        actors: actors,
+        title,
+        shortPlot,
+        longPlot,
+        posterPath,
+        backdropPath,
+        releaseDate,
+        runtime,
+        mpaRating,
+        boxOffice,
+        imdbId,
+        tmdbId,
+        trailer,
+        genres,
+        writers,
+        directors,
+        actors,
       },
       { new: true }
     )

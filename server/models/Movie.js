@@ -5,10 +5,16 @@ const MovieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
+  shortPlot: {
     type: String,
   },
-  imagePath: {
+  longPlot: {
+    type: String,
+  },
+  posterPath: {
+    type: String,
+  },
+  backdropPath: {
     type: String,
   },
   releaseDate: {
@@ -20,17 +26,33 @@ const MovieSchema = new mongoose.Schema({
   mpaRating: {
     type: String,
   },
-  genre: {
+  boxOffice: {
+    type: String,
+  },
+  imdbId: {
+    type: String,
+  },
+  tmdbId: {
+    type: String,
+  },
+  trailer: {
+    type: String,
+  },
+  genres: {
     type: Array,
     of: String,
   },
-  director: {
+  writers: {
+    type: Array,
+    of: String,
+  },
+  directors: {
     type: Array,
     of: String,
   },
   actors: {
     type: Array,
-    of: String, // name
+    of: String,
   },
   reviews: {
     type: Array,
