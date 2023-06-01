@@ -96,7 +96,7 @@ function MoviePage() {
         width={"100%"}
         height="100%"
         alt=""
-        src={movie.imagePath}
+        src={movie.posterPath}
         draggable="false"
         style={{
           position: "absolute",
@@ -189,7 +189,7 @@ function MoviePage() {
             {/* Poster & Trailer */}
             <Box marginTop=".3rem" gap=".4rem" display="flex">
               <img
-                src={movie.imagePath}
+                src={movie.posterPath ? movie.posterPath : ""}
                 width={"30%"}
                 draggable="false"
                 style={{ zIndex: 2 }}
@@ -220,19 +220,20 @@ function MoviePage() {
                     allowFullScreen={true}
                     title={`${movie.title + " trailer"}`}
                     src={
-                      movie.trailerId
-                        ? `https://www.youtube.com/embed/${movie.trailerId}`
+                      movie.trailer
+                        ? `https://${movie.trailer}`
                         : "https://www.youtube.com/embed/jNQXAC9IVRw"
                     }
                   />
+                  {console.log(movie.trailer)}
                 </div>
               </div>
             </Box>
 
             {/* Genre Chips -- todo: this could go to genre page*/}
             <Box marginTop=".7rem">
-              {movie.genre
-                ? movie.genre.map((genre) => (
+              {movie.genres
+                ? movie.genres.map((genre) => (
                     <Chip
                       label={genre}
                       color="primary"
@@ -250,8 +251,8 @@ function MoviePage() {
             {/* Description */}
             <Box marginTop=".9rem">
               <Typography lineHeight="1.5rem" variant="h5" color="white">
-                {movie.description
-                  ? movie.description
+                {movie.shortPlot
+                  ? movie.shortPlot
                   : "Could not get movie description"}
               </Typography>
             </Box>
@@ -303,6 +304,7 @@ function MoviePage() {
                 fontSize="1rem"
                 display="flex"
                 flexDirection="row"
+                alignItems="center"
                 overflow="clip"
                 color="white"
                 sx={{
@@ -330,8 +332,8 @@ function MoviePage() {
                     flexDirection="row"
                     overflow="clip"
                   >
-                    {movie.director
-                      ? movie.director.map((director) => (
+                    {movie.directors
+                      ? movie.directors.map((director) => (
                           <Typography marginLeft=".2rem" variant="h5">
                             {director}
                           </Typography>

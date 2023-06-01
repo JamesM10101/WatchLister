@@ -151,12 +151,12 @@ function UserReviewCard({ reviewId, token }) {
             alignItems="center"
           >
             {/* Poster */}
-            {movie.imagePath !== "undefined" ? (
+            {movie.posterPath !== "undefined" ? (
               <Avatar
                 variant="rounded"
                 alt={`${movie.title} poster`}
                 sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
-                src={`${movie.imagePath}`}
+                src={`${movie.posterPath}`}
               />
             ) : (
               <Avatar

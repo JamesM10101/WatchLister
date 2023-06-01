@@ -79,12 +79,12 @@ function SavedMovieCard({ movieId, token }) {
             alignItems="start"
           >
             {/* Poster */}
-            {movie.imagePath !== "undefined" ? (
+            {movie.posterPath !== "undefined" ? (
               <Avatar
                 variant="rounded"
                 alt={`${movie.title} poster`}
                 sx={{ bgcolor: palette.neutral.dark, width: 48, height: 68 }}
-                src={`${movie.imagePath}`}
+                src={`${movie.posterPath}`}
               />
             ) : (
               <Avatar
@@ -118,7 +118,7 @@ function SavedMovieCard({ movieId, token }) {
                   WebkitLineClamp: 2,
                 }}
               >
-                {movie.description ? movie.description : ""}
+                {movie.shortPlot ? movie.shortPlot : ""}
               </Typography>
             </div>
           </Box>

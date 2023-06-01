@@ -12,16 +12,16 @@ const HomePage = () => {
   // get 10 movies
   const getMovies = async () => {
     const movieIds = [
-      "646da3d1990e5d5dc6919eb8",
-      "646da3d1990e5d5dc6919ebb",
-      "646da3d2990e5d5dc6919ebe",
-      "646da3d2990e5d5dc6919ec1",
-      "646da3d2990e5d5dc6919ec4",
-      "646da3d2990e5d5dc6919ec7",
-      "646da3d2990e5d5dc6919eca",
-      "646da3d2990e5d5dc6919ecd",
-      "646da3d3990e5d5dc6919ed0",
-      "646da3d3990e5d5dc6919ed3",
+      "6478f174ab01369ed81fffae",
+      "64791566ab01369ed821092e",
+      "647916b9ab01369ed82112b6",
+      "64791698ab01369ed82111c2",
+      "64790a4fab01369ed820bbe7",
+      "647908c9ab01369ed820b1c0",
+      "6478f336ab01369ed8200da1",
+      "6478f200ab01369ed8200424",
+      "6478f210ab01369ed82004ac",
+      "6478f178ab01369ed81fffd2",
     ]
 
     let movies = []
