@@ -2,8 +2,9 @@ import React, { useState } from "react"
 import { Box, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import UserReviewCard from "./UserReviewCard"
+import MovieReviewCard from "./MovieReviewCard"
 
-function ReviewsComponent({ reviews = [], type = "movie" }) {
+function ReviewsComponent({ reviews = [], type = "movie", movieId }) {
   const [reviewCount, setReviewCount] = useState(5)
   const token = useSelector((state) => state.token)
 
@@ -15,7 +16,15 @@ function ReviewsComponent({ reviews = [], type = "movie" }) {
     reviews.map((reviewId, i) =>
       i < reviewCount ? (
         <Box margin="auto" marginTop=".5rem">
-          <UserReviewCard reviewId={reviewId} token={token} />
+          {type === "movie" ? (
+            <MovieReviewCard
+              movieId={movieId}
+              reviewId={reviewId}
+              token={token}
+            />
+          ) : (
+            <UserReviewCard reviewId={reviewId} token={token} />
+          )}
         </Box>
       ) : i === reviewCount ? (
         <Box

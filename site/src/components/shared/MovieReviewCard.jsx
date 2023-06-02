@@ -17,7 +17,7 @@ import CreateReviewCard from "../shared/CreateReviewCard.jsx"
 import { setNeedAuthForm } from "../../state/state.js"
 import { Link } from "react-router-dom"
 
-function MovieReviewCard({ movie, reviewId, token }) {
+function MovieReviewCard({ movieId, reviewId, token }) {
   const dispatch = useDispatch()
   const [review, setReview] = useState({})
   const [reviewer, setReviewer] = useState({})
@@ -122,7 +122,7 @@ function MovieReviewCard({ movie, reviewId, token }) {
 
   return isReviewEdit ? (
     <CreateReviewCard
-      movieId={movie._id}
+      movieId={movieId}
       reviewId={review._id}
       pTitle={review.title}
       pReview={review.description}
