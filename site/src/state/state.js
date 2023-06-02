@@ -5,8 +5,9 @@ const initialState = {
   user: null,
   token: null,
   needAuthForm: false,
-  // reviews: [],
   movies: [],
+  searchQuery: null,
+  searchResult: {},
 }
 
 export const authSlice = createSlice({
@@ -38,6 +39,11 @@ export const authSlice = createSlice({
       updatedMovies[action.payload.movie._id] = action.payload.movie
       state.movies = updatedMovies
     },
+    setSearch: (state, action) => {
+      console.log(action.payload)
+      state.searchQuery = action.payload.searchQuery
+      state.searchResult = action.payload.searchResult
+    },
     // setReviews: (state, action) => {
     //   state.reviews = action.payload.reviews
     // },
@@ -57,6 +63,7 @@ export const {
   setLogout,
   setMovies,
   setMovie,
+  setSearch,
   // setReviews,
   // setReview,
 } = authSlice.actions
