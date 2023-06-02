@@ -16,11 +16,12 @@ import {
 } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
 import { setMode, setNeedAuthForm } from "../state/state.js"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import FlexBetween from "./shared/FlexBetween.jsx"
 import defaultUserProfile from "../resources/defaultUserProfile.jpg"
 
 function Navbar() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
   const isFullSizeScreen = useMediaQuery("(min-width: 600px)")
@@ -32,8 +33,7 @@ function Navbar() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const handleSearch = () => {
-    // todo implement actual search here
-    console.log("query: " + searchQuery)
+    navigate(`/search/${searchQuery}`)
   }
 
   return (
@@ -79,7 +79,7 @@ function Navbar() {
                 handleSearch()
               }
             }}
-            sx={{}}
+            sx={{ width: "100%" }}
           />
         </FlexBetween>
       ) : (
