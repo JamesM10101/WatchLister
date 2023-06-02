@@ -47,7 +47,7 @@ function MovieStaff({ actors, directors, writers }) {
 
       <Seperator />
 
-      <Staff title={"Writer(s)"} members={directors} marginLeft="1.15rem" />
+      <Staff title={"Writer(s)"} members={writers} marginLeft="1.15rem" />
     </Box>
   )
 }

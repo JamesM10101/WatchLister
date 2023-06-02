@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useParams } from "react-router-dom"
 import FlexBetween from "../components/shared/FlexBetween.jsx"
 import CreateReviewCard from "../components/shared/CreateReviewCard.jsx"
-import MovieReviewCard from "../components/shared/MovieReviewCard.jsx"
 import BrokenMoviePage from "../components/BrokenMovie.jsx"
 import { setNeedAuthForm, setUser } from "../state/state.js"
 import MovieStaff from "../components/MovieStaff.jsx"
@@ -29,7 +28,6 @@ function MoviePage() {
   const [isStaffVis, setIsStaffVis] = useState(false)
   const [isPageLoading, setIsPageLoading] = useState(true)
   const [isPageBroken, setIsPageBroken] = useState(false)
-  const [reviewCount, setReviewCount] = useState(5)
   const user = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -290,7 +288,9 @@ function MoviePage() {
                       </Typography>
                       <Circle sx={{ scale: ".2" }} />
                       <Typography variant="h5">
-                        {movie.reviews ? movie.reviews.length : ""}
+                        {movie.reviews
+                          ? `${movie.reviews.length} Review(s)`
+                          : ""}
                       </Typography>
                     </Box>
                   ) : (
