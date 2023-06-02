@@ -10,6 +10,7 @@ function MovieCard({ movie }) {
     <Box
       position={"relative"}
       height={"200px"}
+      width={"140px"}
       sx={{
         userSelect: "none",
         "&:hover": { cursor: "pointer" },
@@ -17,7 +18,7 @@ function MovieCard({ movie }) {
     >
       <Box
         onClick={() =>
-          navigate(`movie/${movie._id}`, {
+          navigate(`/movie/${movie._id}`, {
             state: {
               movie: movie,
             },
@@ -26,6 +27,7 @@ function MovieCard({ movie }) {
       >
         <img
           height={"200px"}
+          width={"140px"}
           alt={movie.title}
           draggable="false"
           src={movie.posterPath ? movie.posterPath : noImage}
