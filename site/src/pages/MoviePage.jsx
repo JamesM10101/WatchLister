@@ -14,6 +14,8 @@ import CreateReviewCard from "../components/shared/CreateReviewCard.jsx"
 import MovieReviewCard from "../components/shared/MovieReviewCard.jsx"
 import BrokenMoviePage from "../components/BrokenMovie.jsx"
 import { setNeedAuthForm, setUser } from "../state/state.js"
+import MovieStaff from "../components/MovieStaff.jsx"
+import ReviewsComponent from "../components/shared/ReviewsComponent.jsx"
 
 function MoviePage() {
   const { movieId } = useParams()
@@ -225,7 +227,6 @@ function MoviePage() {
                         : "https://www.youtube.com/embed/jNQXAC9IVRw"
                     }
                   />
-                  {console.log(movie.trailer)}
                 </div>
               </div>
             </Box>
@@ -285,7 +286,7 @@ function MoviePage() {
                       color="white"
                     >
                       <Typography variant="h5">
-                        {movie.rating + "/10"}
+                        {movie.rating + "/5"}
                       </Typography>
                       <Circle sx={{ scale: ".2" }} />
                       <Typography variant="h5">
@@ -319,59 +320,11 @@ function MoviePage() {
 
             {/* Staff */}
             {isStaffVis && (
-              <Box>
-                {/* Directors */}
-                <Box marginTop="1.5rem" display="flex" flexDirection="row">
-                  <Typography variant="h5" fontWeight="bold" color="white">
-                    Director(s)
-                  </Typography>
-                  <Box
-                    marginLeft="3rem"
-                    color="white"
-                    display="flex"
-                    flexDirection="row"
-                    overflow="clip"
-                  >
-                    {movie.directors
-                      ? movie.directors.map((director) => (
-                          <Typography marginLeft=".2rem" variant="h5">
-                            {director}
-                          </Typography>
-                        ))
-                      : "Unknown"}
-                  </Box>
-                </Box>
-
-                {/* Seperator */}
-                <Box
-                  width="100%"
-                  marginTop=".5rem"
-                  height=".5px"
-                  sx={{ backgroundColor: "white" }}
-                ></Box>
-
-                {/* Actors */}
-                <Box marginTop=".5rem" display="flex" flexDirection="row">
-                  <Typography variant="h5" fontWeight="bold" color="white">
-                    Actor(s)
-                  </Typography>
-                  <Box
-                    marginLeft="3rem"
-                    color="white"
-                    display="flex"
-                    flexDirection="row"
-                    overflow="scroll"
-                  >
-                    {movie.actors
-                      ? movie.actors.map((actor) => (
-                          <Typography marginLeft="1.4rem" variant="h5">
-                            {actor}
-                          </Typography>
-                        ))
-                      : "Unknown"}
-                  </Box>
-                </Box>
-              </Box>
+              <MovieStaff
+                actors={movie.actors}
+                writers={movie.writers}
+                directors={movie.directors}
+              />
             )}
 
             {/* Review Header */}
@@ -395,37 +348,11 @@ function MoviePage() {
             marginTop="1rem"
             paddingBottom=".5rem"
           >
-            {movie.reviews ? (
-              movie.reviews.map((reviewId, i) =>
-                i < reviewCount ? (
-                  <Box margin="auto" marginTop=".5rem">
-                    <MovieReviewCard
-                      movie={movie}
-                      reviewId={reviewId}
-                      token={token}
-                    />
-                  </Box>
-                ) : i === reviewCount ? (
-                  <Box
-                    onClick={() => {
-                      setReviewCount(reviewCount + 5)
-                    }}
-                    marginTop={".5rem"}
-                    sx={{
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <Typography fontSize="1rem">Show More</Typography>
-                  </Box>
-                ) : (
-                  <></>
-                )
-              )
-            ) : (
-              <></>
-            )}
+            <ReviewsComponent
+              reviews={movie.reviews}
+              movieId={movie._id}
+              type="movie"
+            />
           </Box>
         </Box>
       </Box>
