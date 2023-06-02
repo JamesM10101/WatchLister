@@ -28,6 +28,18 @@ export const createReview = async (req, res) => {
 
     // update the movie with the new review's id
     const movie = await Movie.findById(id)
+
+    // calculate the updated rating
+    if (movie.rating) {
+      const totalStars = movie.rating * movie.reviews.length
+      movie.rating = (
+        (totalStars + rating) /
+        (movie.reviews.length + 1)
+      ).toFixed(2)
+    } else {
+      movie.rating = rating
+    }
+
     movie.reviews.push(newReview._id)
     await movie.save()
 
@@ -181,17 +193,20 @@ export const editReview = async (req, res) => {
     // review id and post
     const { id } = req.params
     const { title, rating, description } = req.body
+    const review = await Review.findById(id)
+    const movie = await Movie.findById(review.movieId)
+
+    // update the movie rating
+    const totalStars = movie.rating * movie.reviews.length
+    const ratingDiff = rating - review.rating
+    movie.rating = ((totalStars + ratingDiff) / movie.reviews.length).toFixed(2)
+    await movie.save()
 
     // update review
-    const updatedReview = await Review.findByIdAndUpdate(
-      id,
-      {
-        title: title,
-        rating: rating,
-        description: description,
-      },
-      { new: true }
-    )
+    review.title = title
+    review.rating = rating
+    review.description = description
+    const updatedReview = await review.save()
 
     // return the updated review
     res.status(200).json(updatedReview)
@@ -211,6 +226,7 @@ export const deleteReview = async (req, res) => {
     // user and reviewer id
     const user = await User.findById(userId)
     const review = await Review.findById(id)
+    const movie = await Movie.findById(review.movieId)
     const reviewerId = review.userId
 
     // check that deletion is authorized
@@ -220,11 +236,19 @@ export const deleteReview = async (req, res) => {
       })
     }
 
-    // delete the review
-    const result = await Review.findByIdAndDelete(id)
+    // calculate the updated rating
+    if (movie.rating) {
+      const totalStars = movie.rating * movie.reviews.length
+      const divisor = movie.reviews.length - 1
+      movie.rating = ((totalStars - review.rating) / (divisor ? divisor : 1)) // don't divide by zero
+        .toFixed(2)
+    } else {
+      movie.rating = 0
+    }
+    await movie.save()
 
     // remove the review from the movie
-    await Movie.findByIdAndUpdate(review.movieId, {
+    await movie.updateOne({
       $pull: {
         reviews: review._id,
       },
@@ -246,6 +270,9 @@ export const deleteReview = async (req, res) => {
         },
       }
     )
+
+    // delete the review
+    const result = await Review.findByIdAndDelete(id)
 
     // return the updated review
     res.status(200).json(result)
