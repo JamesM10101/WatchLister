@@ -3,6 +3,7 @@ import {
   createMovie,
   getAllMovies,
   getMovie,
+  searchByTitle,
   updateMovieDetails,
   deleteMovie,
 } from "../controllers/movies.js"
@@ -16,6 +17,7 @@ movieRouter.post("/create", verifyToken, createMovie)
 // read
 // movieRouter.get("/", verifyToken, getAllMovies)
 movieRouter.get("/:id", getMovie)
+movieRouter.get("/:query/searchByTitle", searchByTitle)
 
 // update -- admin only
 movieRouter.patch("/:id/update", verifyToken, updateMovieDetails)

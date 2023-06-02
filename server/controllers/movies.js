@@ -89,6 +89,44 @@ export const getMovie = async (req, res) => {
   }
 }
 
+export const searchByTitle = async (req, res) => {
+  try {
+    const { query } = req.params
+    const queryResult = await Movie.aggregate()
+      .search({
+        index: "movie-search",
+        text: {
+          query: query,
+          path: ["title", "genres", "actors", "directors"],
+        },
+      })
+      .limit(30)
+      .addFields({
+        boxOfficeInt: {
+          $cond: {
+            if: { $eq: ["$boxOffice", "N/A"] },
+            then: 0,
+            else: {
+              $toDouble: {
+                $replaceAll: {
+                  input: { $substr: ["$boxOffice", 1, -1] },
+                  find: ",",
+                  replacement: "",
+                },
+              },
+            },
+          },
+        },
+      })
+      .sort({ boxOfficeInt: -1 })
+
+    res.status(200).json(queryResult)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
+
 // update
 export const updateMovieDetails = async (req, res) => {
   try {
