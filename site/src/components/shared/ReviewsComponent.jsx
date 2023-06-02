@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import UserReviewCard from "./UserReviewCard"
 import MovieReviewCard from "./MovieReviewCard"
 
-function ReviewsComponent({ reviews = [], type = "movie", movieId }) {
+function ReviewsComponent({ reviews = [], type, movieId }) {
   const [reviewCount, setReviewCount] = useState(5)
   const token = useSelector((state) => state.token)
 
@@ -23,7 +23,7 @@ function ReviewsComponent({ reviews = [], type = "movie", movieId }) {
               token={token}
             />
           ) : (
-            <UserReviewCard reviewId={reviewId} token={token} />
+            <UserReviewCard reviewId={reviewId} token={token} key={reviewId} />
           )}
         </Box>
       ) : i === reviewCount ? (
