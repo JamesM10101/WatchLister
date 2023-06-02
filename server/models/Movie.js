@@ -38,6 +38,9 @@ const MovieSchema = new mongoose.Schema({
   trailer: {
     type: String,
   },
+  rating: {
+    type: Number,
+  },
   genres: {
     type: Array,
     of: String,
