@@ -11,7 +11,8 @@ import MoviePage from "./pages/MoviePage.jsx"
 import ReviewPage from "./pages/ReviewPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx"
 import AuthForm from "./components/AuthForm.jsx"
-import Navbar from "./components/Navbar"
+import Navbar from "./components/Navbar.jsx"
+import SearchPage from "./pages/SearchPage.jsx"
 
 function App() {
   const mode = useSelector((state) => state.mode)
@@ -30,6 +31,7 @@ function App() {
           <Route path="/movie/:movieId" element={<MoviePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/review/:reviewId" element={<ReviewPage />} />
+          <Route path="/search/:query" element={<SearchPage />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
