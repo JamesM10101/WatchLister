@@ -5,9 +5,15 @@ const initialState = {
   user: null,
   token: null,
   needAuthForm: false,
-  movies: [],
   searchQuery: null,
   searchResult: {},
+  movies: {
+    recentReleased: [],
+    highestRated: [],
+    recentAdded: [],
+    random: [],
+    fetchDate: null,
+  },
 }
 
 export const authSlice = createSlice({
@@ -31,27 +37,25 @@ export const authSlice = createSlice({
       state.user = null
       state.token = null
     },
-    setMovies: (state, action) => {
-      state.movies = action.payload.movies
+    setRandomMovies: (state, action) => {
+      state.movies.random = action.payload.movies
     },
-    setMovie: (state, action) => {
-      const updatedMovies = state.movies
-      updatedMovies[action.payload.movie._id] = action.payload.movie
-      state.movies = updatedMovies
+    setHighestRatedMovies: (state, action) => {
+      state.movies.highestRated = action.payload.movies
+    },
+    setRecentlyAddedMovies: (state, action) => {
+      state.movies.recentAdded = action.payload.movies
+    },
+    setRecentlyReleasedMovies: (state, action) => {
+      state.movies.recentReleased = action.payload.movies
+    },
+    setMovieFetchDate: (state, action) => {
+      state.movies.fetchDate = action.payload.date
     },
     setSearch: (state, action) => {
-      console.log(action.payload)
       state.searchQuery = action.payload.searchQuery
       state.searchResult = action.payload.searchResult
     },
-    // setReviews: (state, action) => {
-    //   state.reviews = action.payload.reviews
-    // },
-    // setReview: (state, action) => {
-    //   const updatedReviews = state.reviews
-    //   updatedReviews[action.payload.review._id] = action.payload.review
-    //   state.reviews = updatedReviews
-    // },
   },
 })
 
@@ -61,10 +65,11 @@ export const {
   setNeedAuthForm,
   setLogin,
   setLogout,
-  setMovies,
-  setMovie,
+  setRandomMovies,
+  setHighestRatedMovies,
+  setRecentlyAddedMovies,
+  setRecentlyReleasedMovies,
+  setMovieFetchDate,
   setSearch,
-  // setReviews,
-  // setReview,
 } = authSlice.actions
 export default authSlice.reducer
