@@ -1,55 +1,90 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setMovies } from "../state/state"
-import { Box } from "@mui/material"
+import { Box, useMediaQuery } from "@mui/material"
+import {
+  setHighestRatedMovies,
+  setMovieFetchDate,
+  setRandomMovies,
+  setRecentlyAddedMovies,
+  setRecentlyReleasedMovies,
+} from "../state/state.js"
 import MovieCarousel from "../components/shared/MovieCarousel"
 
 const HomePage = () => {
   const dispatch = useDispatch()
   const movies = useSelector((state) => state.movies)
-  const token = useSelector((state) => state.token)
-
-  // get 10 movies
-  const getMovies = async () => {
-    const movieIds = [
-      "6478f174ab01369ed81fffae",
-      "64791566ab01369ed821092e",
-      "647916b9ab01369ed82112b6",
-      "64791698ab01369ed82111c2",
-      "64790a4fab01369ed820bbe7",
-      "647908c9ab01369ed820b1c0",
-      "6478f336ab01369ed8200da1",
-      "6478f200ab01369ed8200424",
-      "6478f210ab01369ed82004ac",
-      "6478f178ab01369ed81fffd2",
-    ]
-
-    let movies = []
-
-    for (let id of movieIds) {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      ).then(async (res) => movies.push(await res.json()))
-    }
-
-    dispatch(setMovies({ movies: movies }))
-  }
+  const isFullSizeScreen = useMediaQuery("(min-width: 700px)")
 
   useEffect(() => {
-    getMovies()
+    const getHighestRatedMovies = async () => {
+      await fetch(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/highestRated`
+      ).then(async (res) =>
+        dispatch(setHighestRatedMovies({ movies: await res.json() }))
+      )
+    }
+
+    const getRecAddedMovies = async () => {
+      await fetch(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/recentlyAdded`
+      ).then(async (res) =>
+        dispatch(setRecentlyAddedMovies({ movies: await res.json() }))
+      )
+    }
+
+    const getRecRelMovies = async () => {
+      await fetch(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/recentReleases`
+      ).then(async (res) =>
+        dispatch(setRecentlyReleasedMovies({ movies: await res.json() }))
+      )
+    }
+
+    const getRandMovies = async () => {
+      await fetch(
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/random`
+      ).then(async (res) =>
+        dispatch(setRandomMovies({ movies: await res.json() }))
+      )
+    }
+
+    // get movies when state is null or is old data
+    if (
+      !movies.recentAdded.length ||
+      movies.fetchDate !== new Date().toDateString()
+    ) {
+      getHighestRatedMovies()
+      getRecAddedMovies()
+      getRecRelMovies()
+      getRandMovies()
+      dispatch(setMovieFetchDate({ date: new Date().toDateString() }))
+    } else {
+      getRandMovies()
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box sx={{ width: "80%", margin: "auto" }}>
-      <Box marginTop={"1rem"} display="flex" flexDirection="column">
-        <MovieCarousel movies={movies} />
+      <Box
+        marginTop="1rem"
+        display="flex"
+        flexDirection="column"
+        rowGap={isFullSizeScreen ? "2rem" : "1rem"}
+        marginBottom="3rem"
+      >
+        <MovieCarousel
+          movies={movies.highestRated}
+          title="Highest Rated Movies"
+        />
+        <MovieCarousel
+          movies={movies.recentAdded}
+          title="Recently Added Movies"
+        />
+        <MovieCarousel
+          movies={movies.recentReleased}
+          title="Recently Released Movies"
+        />
+        <MovieCarousel movies={movies.random} title="Random Movies" />
       </Box>
     </Box>
   )
