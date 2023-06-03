@@ -28,6 +28,7 @@ function SearchPage() {
     })
   }
 
+  // eslint-disable-next-line
   useEffect(() => {
     // dont repeat the search if querys are the same
     if (query !== oldQuery) {
