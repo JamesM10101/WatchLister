@@ -15,6 +15,7 @@ import BrokenMoviePage from "../components/BrokenMovie.jsx"
 import { setNeedAuthForm, setUser } from "../state/state.js"
 import MovieStaff from "../components/MovieStaff.jsx"
 import ReviewsComponent from "../components/shared/ReviewsComponent.jsx"
+import noImage from "../resources/noImage.png"
 
 function MoviePage() {
   const { movieId } = useParams()
@@ -189,7 +190,11 @@ function MoviePage() {
             {/* Poster & Trailer */}
             <Box marginTop=".3rem" gap=".4rem" display="flex">
               <img
-                src={movie.posterPath ? movie.posterPath : ""}
+                src={
+                  !movie.posterPath.includes("null")
+                    ? movie.posterPath
+                    : noImage
+                }
                 width={"30%"}
                 draggable="false"
                 style={{ zIndex: 2 }}
@@ -206,7 +211,7 @@ function MoviePage() {
                     width={"100%"}
                     height={"auto"}
                     alt=""
-                    src="https://placehold.it/16x9"
+                    src="https://upload.wikimedia.org/wikipedia/commons/f/f2/16x9_Transparent.png"
                   />
                   <iframe
                     width="100%"
@@ -219,11 +224,7 @@ function MoviePage() {
                     }}
                     allowFullScreen={true}
                     title={`${movie.title + " trailer"}`}
-                    src={
-                      movie.trailer
-                        ? `https://${movie.trailer}`
-                        : "https://www.youtube.com/embed/jNQXAC9IVRw"
-                    }
+                    src={movie.trailer ? `https://${movie.trailer}` : ""}
                   />
                 </div>
               </div>

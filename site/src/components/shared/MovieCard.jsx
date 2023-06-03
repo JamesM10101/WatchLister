@@ -30,7 +30,7 @@ function MovieCard({ movie }) {
           width={"140px"}
           alt={movie.title}
           draggable="false"
-          src={movie.posterPath ? movie.posterPath : noImage}
+          src={!movie.posterPath.includes("null") ? movie.posterPath : noImage}
           style={{ borderRadius: ".5rem", objectFit: "cover" }}
         />
         <Box

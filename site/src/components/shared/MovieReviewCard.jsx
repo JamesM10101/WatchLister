@@ -201,7 +201,7 @@ function MovieReviewCard({ movieId, reviewId, token }) {
               }}
             />
             <Typography fontSize="1.1rem" color="black">
-              {review.rating ? review.rating : "-"}
+              {review.rating ? review.rating : "0"}
             </Typography>
           </Typography>
         </Card>
