@@ -89,6 +89,57 @@ export const getMovie = async (req, res) => {
   }
 }
 
+export const getRandomMovies = async (req, res) => {
+  try {
+    const queryResult = await Movie.aggregate().sample(10)
+
+    res.status(200).json(queryResult)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
+
+export const getRecentReleases = async (req, res) => {
+  try {
+    const queryResult = await Movie.aggregate()
+      .match({
+        releaseDate: {
+          $lte: new Date(),
+        },
+      })
+      .sort({ releaseDate: -1 })
+      .limit(10)
+
+    res.status(200).json(queryResult)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
+
+export const getHighestRated = async (req, res) => {
+  try {
+    const queryResult = await Movie.aggregate().sort({ rating: -1 }).limit(10)
+
+    res.status(200).json(queryResult)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
+
+export const getRecentlyAdded = async (req, res) => {
+  try {
+    const queryResult = await Movie.aggregate().limit(10)
+
+    res.status(200).json(queryResult)
+  } catch (err) {
+    // return the error message
+    res.status(500).json({ error: err.message })
+  }
+}
+
 export const searchByTitle = async (req, res) => {
   try {
     const { query } = req.params

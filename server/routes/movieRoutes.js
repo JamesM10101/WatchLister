@@ -6,6 +6,10 @@ import {
   searchByTitle,
   updateMovieDetails,
   deleteMovie,
+  getRandomMovies,
+  getRecentReleases,
+  getHighestRated,
+  getRecentlyAdded,
 } from "../controllers/movies.js"
 import { verifyToken } from "../middleware/auth.js"
 
@@ -16,7 +20,11 @@ movieRouter.post("/create", verifyToken, createMovie)
 
 // read
 // movieRouter.get("/", verifyToken, getAllMovies)
-movieRouter.get("/:id", getMovie)
+movieRouter.get("/getMovie/:id", getMovie)
+movieRouter.get("/random", getRandomMovies)
+movieRouter.get("/recentReleases", getRecentReleases)
+movieRouter.get("/highestRated", getHighestRated)
+movieRouter.get("/recentlyAdded", getRecentlyAdded)
 movieRouter.get("/:query/searchByTitle", searchByTitle)
 
 // update -- admin only
