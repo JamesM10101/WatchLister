@@ -38,7 +38,7 @@ function MoviePage() {
     // get the movie from backend
     const getMovie = async () => {
       await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/${movieId}`,
+        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${movieId}`,
         {
           method: "GET",
           headers: {

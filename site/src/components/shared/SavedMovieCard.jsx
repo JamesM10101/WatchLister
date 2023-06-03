@@ -18,12 +18,15 @@ function SavedMovieCard({ movieId, token }) {
   const [alertMsg, setAlertMsg] = useState("")
 
   const getMovie = async () => {
-    await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/movies/${movieId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
+    await fetch(
+      `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${movieId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then(async (res) => {
       if (res.status === 200) {
         setMovie(await res.json())
       }
