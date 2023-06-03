@@ -12,6 +12,8 @@ function SearchPage() {
   let oldQuery = useSelector((state) => state.searchQuery)
   let oldResult = useSelector((state) => state.searchResult)
 
+  document.title = "WatchLister | Search"
+
   async function searchByTitle() {
     await fetch(
       `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/${query}/searchByTitle`

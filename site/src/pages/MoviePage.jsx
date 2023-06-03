@@ -49,9 +49,12 @@ function MoviePage() {
         }
       ).then(async (res) => {
         if (res.status === 200) {
-          setMovie(await res.json())
+          const movie = await res.json()
+          setMovie(movie)
+          document.title = `WatchLister | ${movie.title}`
         } else {
           setIsPageBroken(true)
+          document.title = `WatchLister | Error`
         }
         setIsPageLoading(false)
       })
@@ -59,6 +62,7 @@ function MoviePage() {
 
     // check the movie was passed in
     if (state) {
+      document.title = state.movie.title
       setMovie(state.movie)
       setIsPageLoading(false)
     } else {

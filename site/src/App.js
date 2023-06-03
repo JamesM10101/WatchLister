@@ -8,7 +8,6 @@ import { themeSettings } from "./theme"
 import HomePage from "./pages/HomePage.jsx"
 import StartPage from "./pages/StartPage.jsx"
 import MoviePage from "./pages/MoviePage.jsx"
-import ReviewPage from "./pages/ReviewPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx"
 import AuthForm from "./components/AuthForm.jsx"
 import Navbar from "./components/Navbar.jsx"
@@ -30,7 +29,6 @@ function App() {
           <Route path="/start" element={<StartPage />} />
           <Route path="/movie/:movieId" element={<MoviePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/review/:reviewId" element={<ReviewPage />} />
           <Route path="/search/:query" element={<SearchPage />} />
         </Routes>
       </ThemeProvider>

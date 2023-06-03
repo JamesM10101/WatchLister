@@ -41,9 +41,12 @@ function ProfilePage({ pUser = {} }) {
         },
       }).then(async (res) => {
         if (res.status === 200) {
-          setUser(await res.json())
+          const userRes = await res.json()
+          setUser(userRes)
+          document.title = `WatchLister | ${user.username}`
         } else {
           setIsError(true)
+          document.title = "WatchLister | Error"
         }
         setIsLoading(false)
       })
@@ -55,6 +58,7 @@ function ProfilePage({ pUser = {} }) {
     } else {
       if (userId === currentUser._id) {
         setUser(currentUser)
+        document.title = `WatchLister | ${currentUser.username}`
       }
       setIsLoading(false)
     }
