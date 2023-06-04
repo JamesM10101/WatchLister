@@ -354,7 +354,7 @@ function MoviePage() {
             paddingBottom=".5rem"
           >
             <ReviewsComponent
-              reviews={movie.reviews}
+              reviews={[...movie.reviews].reverse()}
               movieId={movie._id}
               type="movie"
             />

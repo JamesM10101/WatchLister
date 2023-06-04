@@ -224,14 +224,16 @@ function ProfilePage({ pUser = {} }) {
         display={["reviews", "likes", "saved"].includes(tabSelec) ? "" : "none"}
       >
         {tabSelec === "reviews" ? (
-          <ReviewsComponent reviews={user.reviews ? user.reviews : {}} />
+          <ReviewsComponent
+            reviews={user.reviews ? [...user.reviews].reverse() : {}}
+          />
         ) : tabSelec === "likes" ? (
           <ReviewsComponent
-            reviews={user.likes ? Object.keys(user.likes) : []}
+            reviews={user.likes ? Object.keys(user.likes).reverse() : []}
           />
         ) : (
           <SavedMoviesComponent
-            movies={user.savedMovies ? user.savedMovies : []}
+            movies={user.savedMovies ? [...user.savedMovies].reverse() : []}
           />
         )}
       </Box>
