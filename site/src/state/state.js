@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   needAuthForm: false,
+  needUpdateForm: false,
   searchQuery: null,
   searchResult: {},
   movies: {
@@ -27,7 +28,10 @@ export const authSlice = createSlice({
       state.mode = state.mode === "light" ? "dark" : "light"
     },
     setNeedAuthForm: (state) => {
-      state.needAuthForm = state.needAuthForm ? false : true
+      state.needAuthForm = !state.needAuthForm
+    },
+    setNeedUpdateForm: (state) => {
+      state.needUpdateForm = state.needUpdateForm ? false : true
     },
     setLogin: (state, action) => {
       state.user = action.payload.user
@@ -63,6 +67,7 @@ export const {
   setUser,
   setMode,
   setNeedAuthForm,
+  setNeedUpdateForm,
   setLogin,
   setLogout,
   setRandomMovies,
