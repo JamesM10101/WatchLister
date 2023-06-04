@@ -97,6 +97,7 @@ function AuthForm() {
       )
       dispatch(setNeedAuthForm())
       onSubmitProps.resetForm()
+      window.location.reload()
     }
   }
 
