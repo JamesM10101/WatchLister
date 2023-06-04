@@ -6,7 +6,6 @@ import { createTheme } from "@mui/material/styles"
 import { themeSettings } from "./theme"
 
 import HomePage from "./pages/HomePage.jsx"
-import StartPage from "./pages/StartPage.jsx"
 import MoviePage from "./pages/MoviePage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx"
 import AuthForm from "./components/AuthForm.jsx"
@@ -26,7 +25,6 @@ function App() {
         {showAuthForm ? <AuthForm /> : ""}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/start" element={<StartPage />} />
           <Route path="/movie/:movieId" element={<MoviePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/search/:query" element={<SearchPage />} />
