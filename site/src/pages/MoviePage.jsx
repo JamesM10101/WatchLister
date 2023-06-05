@@ -17,6 +17,7 @@ import MovieStaff from "../components/MovieStaff.jsx"
 import ReviewsComponent from "../components/shared/ReviewsComponent.jsx"
 import noImage from "../resources/noImage.png"
 import { getMovieById } from "../functions/Movies.js"
+import { toggleSaveMovie } from "../functions/Users.js"
 
 function MoviePage() {
   const { movieId } = useParams()
@@ -63,23 +64,13 @@ function MoviePage() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleMovieSaved = async () => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${movieId}/saveMovie`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          userId: user._id,
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 201) {
-        dispatch(setUser({ user: await res.json() }))
-        setIsSaved(!isSaved)
-      } else {
-      }
-    })
+    const res = await toggleSaveMovie(user._id, token, movieId)
+
+    if (res.status === 201) {
+      dispatch(setUser({ user: await res.json() }))
+      setIsSaved(!isSaved)
+    } else {
+    }
   }
 
   return isPageLoading ? (

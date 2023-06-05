@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import { Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { setUser } from "../../state/state"
 import { getMovieById } from "../../functions/Movies"
+import { toggleSaveMovie } from "../../functions/Users"
 
 function SavedMovieCard({ movieId, token }) {
   const user = useSelector((state) => state.user)
@@ -31,27 +32,17 @@ function SavedMovieCard({ movieId, token }) {
   }, [])
 
   const toggleMovieSaved = async () => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/users/${movieId}/saveMovie`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          userId: user._id,
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 201) {
-        dispatch(setUser({ user: await res.json() }))
-        setSeverity("success")
-        setAlertMsg(isSaved ? "Unsaved Movie" : "Saved Movie")
-        setIsSaved(!isSaved)
-      } else {
-        setSeverity("error")
-        setAlertMsg("Could not " + isSaved ? "Remove Movie" : "Save Movie")
-      }
-    })
+    const res = await toggleSaveMovie(user._id, token, movieId)
+
+    if (res.status === 201) {
+      dispatch(setUser({ user: await res.json() }))
+      setSeverity("success")
+      setAlertMsg(isSaved ? "Unsaved Movie" : "Saved Movie")
+      setIsSaved(!isSaved)
+    } else {
+      setSeverity("error")
+      setAlertMsg("Could not " + isSaved ? "Remove Movie" : "Save Movie")
+    }
   }
 
   return Object.keys(movie).length === 0 ? (

@@ -14,6 +14,7 @@ import { Form, Formik } from "formik"
 import { useDispatch, useSelector } from "react-redux"
 import { setNeedUpdateForm, setUser } from "../state/state"
 import { useState } from "react"
+import { editProfile } from "../functions/Users"
 
 // yup schemas and initial values for form
 const updateSchema = object({
@@ -35,30 +36,22 @@ function EditProfile({ user }) {
     picture: "",
   }
 
-  const handleFormSubmit = (values, onSubmitProps) => {
+  const handleFormSubmit = async (values, onSubmitProps) => {
     const object = {}
     object["email"] = values.email
     object["username"] = values.username
 
-    fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/users/${user._id}/update`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        userId: user._id,
-      },
-      body: JSON.stringify(object),
-    }).then(async (res) => {
-      const result = await res.json()
-      if (res.status === 200) {
-        dispatch(setUser({ user: result }))
-        dispatch(setNeedUpdateForm())
-        window.location.reload()
-      } else {
-        setSeverity("error")
-        setAlertMsg(result.error)
-      }
-    })
+    const res = await editProfile(user._id, token, object)
+
+    const result = await res.json()
+    if (res.status === 200) {
+      dispatch(setUser({ user: result }))
+      dispatch(setNeedUpdateForm())
+      window.location.reload()
+    } else {
+      setSeverity("error")
+      setAlertMsg(result.error)
+    }
   }
 
   return (

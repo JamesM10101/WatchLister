@@ -15,6 +15,7 @@ import BrokenProfilePage from "../components/BrokenProfilePage"
 import ReviewsComponent from "../components/shared/ReviewsComponent"
 import SavedMoviesComponent from "../components/shared/SavedMoviesComponent"
 import EditProfile from "../components/EditProfile"
+import { getUserById } from "../functions/Users"
 
 function ProfilePage({ pUser = {} }) {
   const { userId } = useParams()
@@ -36,22 +37,17 @@ function ProfilePage({ pUser = {} }) {
 
   useEffect(() => {
     const getUser = async () => {
-      await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then(async (res) => {
-        if (res.status === 200) {
-          const userRes = await res.json()
-          setUser(userRes)
-          document.title = `WatchLister | ${user.username}`
-        } else {
-          setIsError(true)
-          document.title = "WatchLister | Error"
-        }
-        setIsLoading(false)
-      })
+      const res = await getUserById(userId)
+
+      if (res.status === 200) {
+        const userRes = await res.json()
+        setUser(userRes)
+        document.title = `WatchLister | ${user.username}`
+      } else {
+        setIsError(true)
+        document.title = "WatchLister | Error"
+      }
+      setIsLoading(false)
     }
 
     // user not passed in and not current user

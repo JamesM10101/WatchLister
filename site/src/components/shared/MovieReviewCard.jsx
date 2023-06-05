@@ -21,6 +21,7 @@ import {
   getReviewById,
   toggleLikeDislikeById,
 } from "../../functions/Reviews"
+import { getUserById } from "../../functions/Users"
 
 function MovieReviewCard({ movieId, reviewId, token }) {
   const dispatch = useDispatch()
@@ -50,16 +51,10 @@ function MovieReviewCard({ movieId, reviewId, token }) {
   }
 
   const getReviewer = async (userId) => {
-    await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/users/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
-      if (res.status === 200) {
-        setReviewer(await res.json())
-      }
-    })
+    const res = await getUserById(userId)
+    if (res.status === 200) {
+      setReviewer(await res.json())
+    }
   }
 
   useEffect(() => {
