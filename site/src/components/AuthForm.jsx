@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   IconButton,
   InputAdornment,
@@ -18,6 +19,7 @@ import Dropzone from "react-dropzone"
 import FlexBetween from "./shared/FlexBetween"
 import { setLogin, setNeedAuthForm } from "../state/state"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { userLogin, userRegistration } from "../functions/Auth"
 
 // yup schemas and initial values for form
 const registerSchema = object({
@@ -45,14 +47,16 @@ const initialValuesLogin = {
 }
 
 function AuthForm() {
+  const [severity, setSeverity] = useState("")
+  const [alertMsg, setAlertMsg] = useState("")
   const [isLogin, setIsLogin] = useState(false)
   const [showPassowrd, setShowPassword] = useState(false)
   const { palette } = useTheme()
   const dispatch = useDispatch()
   const isFullSizeScreen = useMediaQuery("(min-width: 600px)")
 
-  // registration and login functions
   const registerUser = async (values, onSubmitProps) => {
+    // build the form data
     const formData = new FormData()
     for (let i in values) {
       formData.append(i, values[i])
@@ -60,50 +64,41 @@ function AuthForm() {
     formData.append("picturePath", values.picture.name)
 
     // register user on backend
-    const registerUserResponse = await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/auth/register`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    )
+    const regResponse = await userRegistration(formData)
 
-    if (registerUserResponse.status === 201) {
+    if (regResponse.status === 201) {
       setIsLogin(true)
       onSubmitProps.resetForm()
+    } else {
+      setAlertMsg(regResponse.error)
+      setSeverity("error")
     }
   }
 
-  const authUser = async (values, onSubmitProps) => {
-    // register the user
-    const loginUserResponse = await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      }
-    )
+  const loginUser = async (values, onSubmitProps) => {
+    // login user on backend
+    const loginResponse = await userLogin(values)
 
-    // if login was successful reload the page
-    const loggedIn = await loginUserResponse.json()
+    const jsonResponse = await loginResponse.json()
 
-    if (loginUserResponse.status === 200) {
+    if (loginResponse.status === 200) {
       dispatch(
         setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
+          user: jsonResponse.user,
+          token: jsonResponse.token,
         })
       )
       dispatch(setNeedAuthForm())
       onSubmitProps.resetForm()
       window.location.reload()
+    } else {
+      setAlertMsg(jsonResponse.error)
+      setSeverity("error")
     }
   }
 
-  // handle auth based on form type
   const handleFormSubmit = async (values, onSubmitProps) => {
-    if (isLogin) await authUser(values, onSubmitProps)
+    if (isLogin) await loginUser(values, onSubmitProps)
     else await registerUser(values, onSubmitProps)
   }
 
@@ -283,6 +278,13 @@ function AuthForm() {
           )}
         </Formik>
       </Box>
+
+      {/* Error Alert */}
+      {severity && (
+        <Alert severity={severity} sx={{ marginTop: "1rem" }}>
+          <Typography>{alertMsg}</Typography>
+        </Alert>
+      )}
     </Box>
   )
 }
