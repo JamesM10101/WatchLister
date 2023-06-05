@@ -25,7 +25,7 @@ function EditProfile({ user }) {
   const isFullSizeScreen = useMediaQuery("(min-width: 600)")
   const token = useSelector((state) => state.token)
   const [severity, setSeverity] = useState("")
-  const [alertMsg, setAlertMsg] = useState("")
+  const [alertMsg, setAlertMsg] = useState("") // eslint-disable-line no-unused-vars
   const { palette } = useTheme()
   const dispatch = useDispatch()
 

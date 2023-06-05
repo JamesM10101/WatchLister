@@ -157,7 +157,7 @@ function MovieReviewCard({ movieId, reviewId, token }) {
               <Avatar
                 alt="profile"
                 sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
-                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/assets/${reviewer.picturePath}`}
+                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/userImages/${user.picturePath}`}
               />
             ) : (
               <Avatar

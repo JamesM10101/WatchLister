@@ -10,10 +10,11 @@ import {
 } from "@mui/material"
 import { useTheme } from "@emotion/react"
 import { Logout, Settings } from "@mui/icons-material"
-import { setLogout } from "../state/state"
+import { setLogout, setNeedUpdateForm } from "../state/state"
 import BrokenProfilePage from "../components/BrokenProfilePage"
 import ReviewsComponent from "../components/shared/ReviewsComponent"
 import SavedMoviesComponent from "../components/shared/SavedMoviesComponent"
+import EditProfile from "../components/EditProfile"
 
 function ProfilePage({ pUser = {} }) {
   const { userId } = useParams()
@@ -25,6 +26,7 @@ function ProfilePage({ pUser = {} }) {
   const [isLoading, setIsLoading] = useState(true)
   const [tabSelec, setTabSelec] = useState("reviews")
   const isFullSizeScreen = useMediaQuery("(min-width: 600px)")
+  const showUpdateForm = useSelector((state) => state.needUpdateForm)
 
   let currentUser = useSelector((state) => state.user)
 
@@ -70,6 +72,7 @@ function ProfilePage({ pUser = {} }) {
     <BrokenProfilePage />
   ) : (
     <Box>
+      {showUpdateForm && <EditProfile user={user} />}
       <Box
         height="100%"
         width={isFullSizeScreen ? "65%" : "90%"}
@@ -99,7 +102,7 @@ function ProfilePage({ pUser = {} }) {
               }}
               src={
                 user.picturePath
-                  ? `http://localhost:${process.env.SERVER_PORT}/assets/${user.picturePath}`
+                  ? `${process.env.REACT_APP_BACKEND_ADDRESS}/userImages/${user.picturePath}`
                   : ""
               }
             >
@@ -129,7 +132,7 @@ function ProfilePage({ pUser = {} }) {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  /* todo: navigate to edit account page */
+                  dispatch(setNeedUpdateForm())
                 }}
                 sx={{
                   backgroundColor: palette.background.alt,
