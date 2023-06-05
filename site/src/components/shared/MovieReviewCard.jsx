@@ -16,6 +16,11 @@ import FlexBetween from "./FlexBetween"
 import CreateReviewCard from "../shared/CreateReviewCard.jsx"
 import { setNeedAuthForm } from "../../state/state.js"
 import { Link } from "react-router-dom"
+import {
+  deleteReviewById,
+  getReviewById,
+  toggleLikeDislikeById,
+} from "../../functions/Reviews"
 
 function MovieReviewCard({ movieId, reviewId, token }) {
   const dispatch = useDispatch()
@@ -31,26 +36,17 @@ function MovieReviewCard({ movieId, reviewId, token }) {
   const palette = useTheme().palette
 
   const getReview = async () => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+    const res = await getReviewById(reviewId)
+    const parsedRes = await res.json()
+
+    if (res.status === 200) {
+      setReview(parsedRes)
+      getReviewer(parsedRes.userId)
+      if (user && parsedRes) {
+        setIsLiked(parsedRes.likes[user._id])
+        setIsDisliked(parsedRes.dislikes[user._id])
       }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        const result = await res.json()
-        setReview(result)
-        getReviewer(result.userId)
-        if (user && result) {
-          setIsLiked(result.likes[user._id])
-          setIsDisliked(result.dislikes[user._id])
-        }
-      }
-    })
+    }
   }
 
   const getReviewer = async (userId) => {
@@ -71,46 +67,31 @@ function MovieReviewCard({ movieId, reviewId, token }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleLikeDislike = async (requestType) => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}/${requestType}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          userId: user._id,
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        const updatedReview = await res.json()
-        setReview(updatedReview)
-        setIsLiked(updatedReview.likes[user._id])
-        setIsDisliked(updatedReview.dislikes[user._id])
-      }
-    })
+    const res = await toggleLikeDislikeById(
+      user._id,
+      token,
+      reviewId,
+      requestType
+    )
+
+    if (res.status === 200) {
+      const updatedReview = await res.json()
+      setReview(updatedReview)
+      setIsLiked(updatedReview.likes[user._id])
+      setIsDisliked(updatedReview.dislikes[user._id])
+    }
   }
 
   const deleteReview = async () => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${reviewId}/delete`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          userId: user._id,
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        setSeverity("success")
-        setAlertMsg("Review Deleted")
-      } else {
-        setSeverity("error")
-        setAlertMsg("Could Not Delete")
-      }
-    })
+    const res = await deleteReviewById(user._id, token, reviewId)
+
+    if (res.status === 200) {
+      setSeverity("success")
+      setAlertMsg("Review Deleted")
+    } else {
+      setSeverity("error")
+      setAlertMsg("Could Not Delete")
+    }
   }
 
   const alertDeletion = () => {
@@ -157,7 +138,7 @@ function MovieReviewCard({ movieId, reviewId, token }) {
               <Avatar
                 alt="profile"
                 sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
-                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/userImages/${user.picturePath}`}
+                src={`${process.env.REACT_APP_BACKEND_ADDRESS}/userImages/${reviewer.picturePath}`}
               />
             ) : (
               <Avatar

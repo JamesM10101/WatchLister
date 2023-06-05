@@ -12,6 +12,7 @@ import { Send, Star } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
 import { setNeedAuthForm } from "../../state/state"
 import { useTheme } from "@emotion/react"
+import { createReview, editReview } from "../../functions/Reviews"
 
 function CreateReviewCard({
   reviewId,
@@ -48,51 +49,42 @@ function CreateReviewCard({
     )
   }
 
-  // call backend create review function
-  const createReview = async () => {
+  // creates or edits review based on edit variable
+  const handleReview = async () => {
     if (!reviewTitle) {
       setSeverity("error")
       setAlertMsg("Title Required")
       return
     }
 
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/reviews/${
-        edit ? reviewId : movieId
-      }/${edit ? "edit" : "create"}`,
-      {
-        method: edit ? "PATCH" : "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          userId: user._id,
-        },
-        body: JSON.stringify({
-          title: reviewTitle,
-          rating: rating,
-          description: review,
-        }),
-      }
-    ).then(async (result) => {
-      if (result.status === 201 || result.status === 200) {
-        // success -- clear fields
-        setSeverity("success")
-        setAlertMsg("Review Posted")
-        setRating(0)
-        setReview("")
-        setReviewTitle("")
-        document.getElementById("createReviewTitle").value = ""
-        document.getElementById("createReviewBody").value = ""
+    const reviewData = {
+      title: reviewTitle,
+      rating: rating,
+      description: review,
+    }
 
-        if (edit) {
-          setIsReviewEdit(false)
-          setReviewForMovie(await result.json())
-        }
-      } else {
-        setSeverity("error")
-        setAlertMsg(result.error)
+    const result = await (edit
+      ? editReview(user._id, token, reviewId, reviewData)
+      : createReview(user._id, token, movieId, reviewData))
+
+    if (result.status === 201 || result.status === 200) {
+      // success -- clear fields
+      setSeverity("success")
+      setAlertMsg("Review Posted")
+      setRating(0)
+      setReview("")
+      setReviewTitle("")
+      document.getElementById("createReviewTitle").value = ""
+      document.getElementById("createReviewBody").value = ""
+
+      if (edit) {
+        setIsReviewEdit(false)
+        setReviewForMovie(await result.json())
       }
-    })
+    } else {
+      setSeverity("error")
+      setAlertMsg(result.error)
+    }
   }
 
   return (
@@ -142,7 +134,7 @@ function CreateReviewCard({
         <IconButton
           onClick={() => {
             if (user) {
-              createReview()
+              handleReview()
             } else {
               dispatch(setNeedAuthForm())
             }
