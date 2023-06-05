@@ -1,11 +1,12 @@
 import { useTheme } from "@emotion/react"
 import { Alert, Avatar, Box, Card, IconButton, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
 import { Link } from "react-router-dom"
 import { Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { setUser } from "../../state/state"
+import { getMovieById } from "../../functions/Movies"
 
 function SavedMovieCard({ movieId, token }) {
   const user = useSelector((state) => state.user)
@@ -18,22 +19,14 @@ function SavedMovieCard({ movieId, token }) {
   const [alertMsg, setAlertMsg] = useState("")
 
   const getMovie = async () => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${movieId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        setMovie(await res.json())
-      }
-    })
+    const res = await getMovieById(movieId)
+
+    if (res.status === 200) {
+      setMovie(await res.json())
+    }
   }
 
-  useState(() => {
+  useEffect(() => {
     getMovie()
   }, [])
 

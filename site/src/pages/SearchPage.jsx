@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { setSearch } from "../state/state"
 import { Box } from "@mui/material"
 import MovieCard from "../components/shared/MovieCard.jsx"
+import { searchMoviesByTitle } from "../functions/Movies"
 
 function SearchPage() {
   const dispatch = useDispatch()
@@ -15,19 +16,17 @@ function SearchPage() {
   document.title = "WatchLister | Search"
 
   async function searchByTitle() {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/${query}/searchByTitle`
-    ).then(async (res) => {
-      if (res.status === 200) {
-        const parsedResult = await res.json()
-        dispatch(setSearch({ searchQuery: query, searchResult: parsedResult }))
-        setQueryResult(parsedResult)
+    const res = await searchMoviesByTitle(query)
 
-        // set old queries to new ones -- identifies when user has searched again, prevent inf useEffect loop
-        oldQuery = query
-        oldResult = parsedResult
-      }
-    })
+    if (res.status === 200) {
+      const parsedResult = await res.json()
+      dispatch(setSearch({ searchQuery: query, searchResult: parsedResult }))
+      setQueryResult(parsedResult)
+
+      // set old queries to new ones -- identifies when user has searched again, prevent inf useEffect loop
+      oldQuery = query
+      oldResult = parsedResult
+    }
   }
 
   // eslint-disable-next-line

@@ -16,6 +16,7 @@ import FlexBetween from "./FlexBetween"
 import CreateReviewCard from "../shared/CreateReviewCard.jsx"
 import { setNeedAuthForm } from "../../state/state.js"
 import { Link } from "react-router-dom"
+import { getMovieById } from "../../functions/Movies"
 
 function UserReviewCard({ reviewId, token }) {
   const dispatch = useDispatch()
@@ -55,19 +56,11 @@ function UserReviewCard({ reviewId, token }) {
   }
 
   const getMovie = async (movieId) => {
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${movieId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(async (res) => {
-      if (res.status === 200) {
-        setMovie(await res.json())
-      }
-    })
+    const res = await getMovieById(movieId)
+
+    if (res.status === 200) {
+      setMovie(await res.json())
+    }
   }
 
   useEffect(() => {

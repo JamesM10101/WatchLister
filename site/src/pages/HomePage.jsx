@@ -9,6 +9,12 @@ import {
   setRecentlyReleasedMovies,
 } from "../state/state.js"
 import MovieCarousel from "../components/shared/MovieCarousel"
+import {
+  getHighestRated,
+  getRandom,
+  getRecentlyAdded,
+  getRecentlyReleased,
+} from "../functions/Movies.js"
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -16,36 +22,20 @@ const HomePage = () => {
   const isFullSizeScreen = useMediaQuery("(min-width: 700px)")
 
   useEffect(() => {
-    const getHighestRatedMovies = async () => {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/highestRated`
-      ).then(async (res) =>
-        dispatch(setHighestRatedMovies({ movies: await res.json() }))
-      )
-    }
+    const getMovies = async () => {
+      const highRes = await getHighestRated()
+      dispatch(setHighestRatedMovies({ movies: await highRes.json() }))
 
-    const getRecAddedMovies = async () => {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/recentlyAdded`
-      ).then(async (res) =>
-        dispatch(setRecentlyAddedMovies({ movies: await res.json() }))
-      )
-    }
+      const recAddRes = await getRecentlyAdded()
+      dispatch(setRecentlyAddedMovies({ movies: await recAddRes.json() }))
 
-    const getRecRelMovies = async () => {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/recentReleases`
-      ).then(async (res) =>
-        dispatch(setRecentlyReleasedMovies({ movies: await res.json() }))
-      )
+      const recRelRes = await getRecentlyReleased()
+      dispatch(setRecentlyReleasedMovies({ movies: await recRelRes.json() }))
     }
 
     const getRandMovies = async () => {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/random`
-      ).then(async (res) =>
-        dispatch(setRandomMovies({ movies: await res.json() }))
-      )
+      const res = await getRandom()
+      dispatch(setRandomMovies({ movies: await res.json() }))
     }
 
     // get movies when state is null or is old data
@@ -53,9 +43,7 @@ const HomePage = () => {
       !movies.recentAdded.length ||
       movies.fetchDate !== new Date().toDateString()
     ) {
-      getHighestRatedMovies()
-      getRecAddedMovies()
-      getRecRelMovies()
+      getMovies()
       getRandMovies()
       dispatch(setMovieFetchDate({ date: new Date().toDateString() }))
     } else {

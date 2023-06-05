@@ -16,6 +16,7 @@ import { setNeedAuthForm, setUser } from "../state/state.js"
 import MovieStaff from "../components/MovieStaff.jsx"
 import ReviewsComponent from "../components/shared/ReviewsComponent.jsx"
 import noImage from "../resources/noImage.png"
+import { getMovieById } from "../functions/Movies.js"
 
 function MoviePage() {
   const { movieId } = useParams()
@@ -38,26 +39,17 @@ function MoviePage() {
 
     // get the movie from backend
     const getMovie = async () => {
-      await fetch(
-        `${process.env.REACT_APP_BACKEND_ADDRESS}/movies/getMovie/${movieId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      ).then(async (res) => {
-        if (res.status === 200) {
-          const movie = await res.json()
-          setMovie(movie)
-          document.title = `WatchLister | ${movie.title}`
-        } else {
-          setIsPageBroken(true)
-          document.title = `WatchLister | Error`
-        }
-        setIsPageLoading(false)
-      })
+      const res = await getMovieById(movieId)
+
+      if (res.status === 200) {
+        const movie = await res.json()
+        setMovie(movie)
+        document.title = `WatchLister | ${movie.title}`
+      } else {
+        setIsPageBroken(true)
+        document.title = `WatchLister | Error`
+      }
+      setIsPageLoading(false)
     }
 
     // check the movie was passed in
