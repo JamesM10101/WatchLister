@@ -1,7 +1,6 @@
 import { useState } from "react"
 import {
   Avatar,
-  Badge,
   IconButton,
   InputBase,
   Typography,
@@ -11,7 +10,6 @@ import {
 import {
   DarkModeOutlined,
   LightModeOutlined,
-  NotificationsOutlined,
   Search,
 } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
@@ -108,23 +106,7 @@ function Navbar() {
               )}
             </IconButton>
 
-            {/* Notications */}
-            {/* todo -- accurately set the badgeContent */}
-            <Badge color="secondary" badgeContent={0}>
-              <IconButton
-                // todo -- add some functionality to this button
-                onClick={() => {}}
-                sx={{ transform: "scale(1.3)" }}
-              >
-                {themeMode === "dark" ? (
-                  <NotificationsOutlined />
-                ) : (
-                  <NotificationsOutlined sx={{ color: palette.neutral.dark }} />
-                )}
-              </IconButton>
-            </Badge>
-
-            {/* Set the user icon to the users image or first initial -- routes to account page */}
+            {/* Set the user icon to the users image or first initial */}
             {user ? (
               <Link
                 to={`/profile/${user._id}`}
