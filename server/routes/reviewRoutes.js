@@ -17,7 +17,7 @@ const reviewRouter = express.Router()
 reviewRouter.post("/:id/create", verifyToken, createReview)
 
 // read
-reviewRouter.get("/:id", getReview)
+reviewRouter.get("/getReview/:id", getReview)
 reviewRouter.get("/:id/user", getAllUserReviews)
 reviewRouter.get("/:id/movie", getAllMovieReviews)
 
