@@ -13,7 +13,7 @@ export const register = async (req, res) => {
     // create the new user
     const newUser = new User({
       username,
-      email,
+      email: email.toLowerCase(),
       password: passwordHash,
       picturePath,
       savedMovies: [],
@@ -36,7 +36,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body
 
     // get user with email
-    const user = await User.findOne({ email: email })
+    const user = await User.findOne({ email: email.toLowerCase() })
 
     // user doesnt exist
     if (!user) return res.status(400).json({ error: "User does not exist." })

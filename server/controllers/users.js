@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt"
 import Movie from "../models/Movie.js"
 import Review from "../models/Review.js"
 import User from "../models/User.js"
@@ -143,11 +142,12 @@ export const updateUser = async (req, res) => {
     // get the user with its id
     const { id } = req.params
     const userId = req.header("userId")
-    const { username, email, password, picturePath } = req.body
     const user = await User.findById(id)
+    let { username, email } = req.body
+    email = email.toLowerCase()
 
     // check the user is authroized -- this ID has been comfirmed through verifyToken
-    if (userId != user._id) {
+    if (userId != user._id && !user.admin) {
       return res.status(403).json({ error: "Unauthorized user" })
     }
 
@@ -161,8 +161,6 @@ export const updateUser = async (req, res) => {
     // update the user details
     user.username = username
     user.email = email
-    user.password = await bcrypt.hash(password, 15)
-    user.picturePath = picturePath
 
     // saved the updated user
     const updatedUser = await user.save()
