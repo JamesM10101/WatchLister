@@ -1,12 +1,15 @@
 import React, { useState } from "react"
-import { Box, Typography } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import { useSelector } from "react-redux"
 import UserReviewCard from "./UserReviewCard"
 import MovieReviewCard from "./MovieReviewCard"
+import { ArrowDownward } from "@mui/icons-material"
+import { useTheme } from "@emotion/react"
 
 function ReviewsComponent({ reviews = [], type, movieId }) {
   const [reviewCount, setReviewCount] = useState(5)
   const token = useSelector((state) => state.token)
+  const palette = useTheme().palette
 
   if (reviews === null) {
     reviews = []
@@ -27,18 +30,30 @@ function ReviewsComponent({ reviews = [], type, movieId }) {
           )}
         </Box>
       ) : i === reviewCount ? (
-        <Box
-          onClick={() => {
-            setReviewCount(reviewCount + 5)
-          }}
-          marginTop={".5rem"}
-          sx={{
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
-        >
-          <Typography fontSize="1rem">Show More</Typography>
+        // <Box
+        //   onClick={() => {
+        //     setReviewCount(reviewCount + 5)
+        //   }}
+        //   marginTop={".5rem"}
+        //   sx={{
+        //     "&:hover": {
+        //       cursor: "pointer",
+        //     },
+        //   }}
+        // >
+        //   <Typography fontSize="1rem">Show More</Typography>
+        // </Box>
+        <Box width="100%" textAlign="center">
+          <IconButton
+            sx={{
+              backgroundColor: palette.background.alt,
+              margin: "auto",
+              marginTop: ".5rem",
+            }}
+            onClick={() => setReviewCount(reviewCount + 5)}
+          >
+            <ArrowDownward />
+          </IconButton>
         </Box>
       ) : (
         <></>
