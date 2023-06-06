@@ -3,6 +3,7 @@ import {
   BookmarkBorder,
   Circle,
   ExpandMore,
+  ImageNotSupported,
   Star,
 } from "@mui/icons-material"
 import { Box, Chip, IconButton, Typography, useMediaQuery } from "@mui/material"
@@ -15,9 +16,9 @@ import BrokenMoviePage from "../components/BrokenMovie.jsx"
 import { setNeedAuthForm, setUser } from "../state/state.js"
 import MovieStaff from "../components/MovieStaff.jsx"
 import ReviewsComponent from "../components/shared/ReviewsComponent.jsx"
-import noImage from "../resources/noImage.png"
 import { getMovieById } from "../functions/Movies.js"
 import { toggleSaveMovie } from "../functions/Users.js"
+import { useTheme } from "@emotion/react"
 
 function MoviePage() {
   const { movieId } = useParams()
@@ -25,6 +26,7 @@ function MoviePage() {
   const state = useLocation().state
   const token = useSelector((state) => state.token)
   const isFullSizeScreen = useMediaQuery("(min-width: 1000px)")
+  const palette = useTheme().palette
 
   const [movie, setMovie] = useState({})
   const [isSaved, setIsSaved] = useState(false)
@@ -175,18 +177,30 @@ function MoviePage() {
             </Box>
 
             {/* Poster & Trailer */}
-            <Box marginTop=".3rem" gap=".4rem" display="flex">
-              <img
-                src={
-                  !movie.posterPath.includes("null")
-                    ? movie.posterPath
-                    : noImage
-                }
-                width={"30%"}
-                draggable="false"
-                style={{ zIndex: 2 }}
-                alt={`${movie.title} poster`}
-              />
+            <Box
+              marginTop=".3rem"
+              gap=".4rem"
+              display="flex"
+              alignItems="center"
+            >
+              {!movie.posterPath.includes("null") ? (
+                <img
+                  src={movie.posterPath}
+                  width={"30%"}
+                  draggable="false"
+                  style={{ zIndex: 2 }}
+                  alt={`${movie.title} poster`}
+                />
+              ) : (
+                <ImageNotSupported
+                  sx={{
+                    width: "30%",
+                    height: "100%",
+                    alt: movie.title,
+                    color: palette.mode !== "dark" ? "black" : "white",
+                  }}
+                />
+              )}
               <div
                 style={{
                   width: "80%",

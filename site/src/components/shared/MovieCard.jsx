@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
 import { Box, Typography } from "@mui/material"
-import { Star } from "@mui/icons-material"
-import noImage from "../../resources/noImage.png"
+import { ImageNotSupported, Star } from "@mui/icons-material"
+import { useTheme } from "@emotion/react"
 
 function MovieCard({ movie }) {
+  const palette = useTheme().palette
+
   return (
     <Box
       position={"relative"}
@@ -22,14 +24,26 @@ function MovieCard({ movie }) {
           },
         }}
       >
-        <img
-          height={"200px"}
-          width={"140px"}
-          alt={movie.title}
-          draggable="false"
-          src={!movie.posterPath.includes("null") ? movie.posterPath : noImage}
-          style={{ borderRadius: ".5rem", objectFit: "cover" }}
-        />
+        {!movie.posterPath.includes("null") ? (
+          <img
+            height={"200px"}
+            width={"140px"}
+            alt={movie.title}
+            draggable="false"
+            src={movie.posterPath}
+            style={{ borderRadius: ".5rem", objectFit: "cover" }}
+          />
+        ) : (
+          <ImageNotSupported
+            sx={{
+              height: "200px",
+              width: "140px",
+              alt: movie.title,
+              color: palette.mode !== "dark" ? "black" : "white",
+            }}
+          />
+        )}
+
         <Box
           position="absolute"
           width="100%"
