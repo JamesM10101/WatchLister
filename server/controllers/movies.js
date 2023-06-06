@@ -158,12 +158,10 @@ export const searchByTitle = async (req, res) => {
             if: { $eq: ["$boxOffice", "N/A"] },
             then: 0,
             else: {
-              $toDouble: {
-                $replaceAll: {
-                  input: { $substr: ["$boxOffice", 1, -1] },
-                  find: ",",
-                  replacement: "",
-                },
+              $replaceAll: {
+                input: { $substr: ["$boxOffice", 1, -1] },
+                find: ",",
+                replacement: "",
               },
             },
           },
