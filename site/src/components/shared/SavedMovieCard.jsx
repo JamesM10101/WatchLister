@@ -29,7 +29,7 @@ function SavedMovieCard({ movieId, token }) {
 
   useEffect(() => {
     getMovie()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleMovieSaved = async () => {
     const res = await toggleSaveMovie(user._id, token, movieId)
