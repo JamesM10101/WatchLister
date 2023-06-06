@@ -10,13 +10,13 @@ import {
 import {
   DarkModeOutlined,
   LightModeOutlined,
+  Person,
   Search,
 } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
 import { setMode, setNeedAuthForm } from "../state/state.js"
 import { Link, useNavigate } from "react-router-dom"
 import FlexBetween from "./shared/FlexBetween.jsx"
-import defaultUserProfile from "../resources/defaultUserProfile.jpg"
 
 function Navbar() {
   const navigate = useNavigate()
@@ -120,7 +120,12 @@ function Navbar() {
                   />
                 ) : user ? (
                   <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>
-                    {user.username[0]}
+                    <Person
+                      sx={{
+                        width: 24,
+                        height: 24,
+                      }}
+                    />
                   </Avatar>
                 ) : (
                   "" // how
@@ -131,14 +136,15 @@ function Navbar() {
               <Avatar
                 onClick={() => dispatch(setNeedAuthForm())}
                 alt="profile"
-                src={defaultUserProfile}
                 sx={{
                   bgcolor: palette.neutral.dark,
                   "&:hover": {
                     cursor: "pointer",
                   },
                 }}
-              />
+              >
+                <Person />
+              </Avatar>
             )}
           </FlexBetween>
         </>

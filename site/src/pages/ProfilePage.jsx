@@ -9,7 +9,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@emotion/react"
-import { Logout, Settings } from "@mui/icons-material"
+import { Logout, Person, Settings } from "@mui/icons-material"
 import { setLogout, setNeedUpdateForm } from "../state/state"
 import BrokenProfilePage from "../components/BrokenProfilePage"
 import ReviewsComponent from "../components/shared/ReviewsComponent"
@@ -102,7 +102,13 @@ function ProfilePage({ pUser = {} }) {
                   : ""
               }
             >
-              {user.username ? user.username[0] : ""}
+              <Person
+                sx={{
+                  width: 96,
+                  height: 96,
+                  fontSize: "3rem",
+                }}
+              />
             </Avatar>
 
             <Typography variant="h3">
