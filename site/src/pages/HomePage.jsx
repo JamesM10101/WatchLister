@@ -19,7 +19,7 @@ import {
 const HomePage = () => {
   const dispatch = useDispatch()
   const movies = useSelector((state) => state.movies)
-  const isFullSizeScreen = useMediaQuery("(min-width: 700px)")
+  const isFullSizeScreen = useMediaQuery("(min-width: 870px)")
 
   document.title = "WatchLister | Home"
 
@@ -54,7 +54,7 @@ const HomePage = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box sx={{ width: "80%", margin: "auto" }}>
+    <Box sx={{ width: isFullSizeScreen ? "80%" : "90%", margin: "auto" }}>
       <Box
         marginTop="1rem"
         display="flex"
