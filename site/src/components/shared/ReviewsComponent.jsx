@@ -30,19 +30,6 @@ function ReviewsComponent({ reviews = [], type, movieId }) {
           )}
         </Box>
       ) : i === reviewCount ? (
-        // <Box
-        //   onClick={() => {
-        //     setReviewCount(reviewCount + 5)
-        //   }}
-        //   marginTop={".5rem"}
-        //   sx={{
-        //     "&:hover": {
-        //       cursor: "pointer",
-        //     },
-        //   }}
-        // >
-        //   <Typography fontSize="1rem">Show More</Typography>
-        // </Box>
         <Box width="100%" textAlign="center">
           <IconButton
             sx={{
