@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage.jsx"
 import AuthForm from "./components/AuthForm.jsx"
 import Navbar from "./components/Navbar.jsx"
 import SearchPage from "./pages/SearchPage.jsx"
+import BrokenPage from "./components/BrokenPage"
 
 function App() {
   const mode = useSelector((state) => state.mode)
@@ -24,6 +25,7 @@ function App() {
         <Navbar />
         {showAuthForm ? <AuthForm /> : ""}
         <Routes>
+          <Route path="*" element={<BrokenPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/movie/:movieId" element={<MoviePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
