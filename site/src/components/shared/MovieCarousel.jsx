@@ -15,9 +15,7 @@ function MovieCarousel({ movies, title }) {
   // keep track of starting index, needed for screen resizing
   const [startIndex, setStartIndex] = useState(0)
   const [endIndex, setEndIndex] = useState(5)
-  const [startIndexMobile, setStartIndexMobile] = useState(0)
-  const [endIndexMobile, setEndIndexMobile] = useState(3)
-  const isFullSizeScreen = useMediaQuery("(min-width: 700px)")
+  const isFullSizeScreen = useMediaQuery("(min-width: 870px)")
 
   return (
     <div>
@@ -30,58 +28,63 @@ function MovieCarousel({ movies, title }) {
           {title}
         </Typography>
       </div>
-      <Box
-        marginTop={isFullSizeScreen ? ".5rem" : "-.75rem"}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        gap="1rem"
-        sx={{
-          scale: isFullSizeScreen ? "1" : "0.8",
-        }}
-      >
-        {/* Back Button */}
-        <IconButton
-          disabled={(isFullSizeScreen ? startIndex : startIndexMobile) <= 0}
+      {isFullSizeScreen ? (
+        <Box
+          marginTop={isFullSizeScreen ? ".5rem" : "-.75rem"}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          gap="1rem"
           sx={{
-            backgroundColor: palette.background.alt,
-          }}
-          onClick={() => {
-            setStartIndex(startIndex - 5)
-            setEndIndex(endIndex - 5)
-            setStartIndexMobile(startIndexMobile - 3)
-            setEndIndexMobile(endIndexMobile - 3)
+            scale: isFullSizeScreen ? "1" : "0.8",
           }}
         >
-          <ArrowBack />
-        </IconButton>
+          {/* Back Button */}
+          <IconButton
+            disabled={startIndex <= 0}
+            sx={{
+              backgroundColor: palette.background.alt,
+            }}
+            onClick={() => {
+              setStartIndex(startIndex - 5)
+              setEndIndex(endIndex - 5)
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
 
-        {/* Movies */}
-        {movies
-          .slice(
-            isFullSizeScreen ? startIndex : startIndexMobile,
-            isFullSizeScreen ? endIndex : endIndexMobile
-          )
-          .map((movie) => (
+          {/* Movies */}
+          {movies.slice(startIndex, endIndex).map((movie) => (
             <MovieCard key={movie._id} movie={movie} />
           ))}
 
-        {/* Forward Button */}
-        <IconButton
-          disabled={
-            (isFullSizeScreen ? endIndex : endIndexMobile) >= movies.length
-          }
-          sx={{ backgroundColor: palette.background.alt }}
-          onClick={() => {
-            setStartIndex(startIndex + 5)
-            setEndIndex(endIndex + 5)
-            setStartIndexMobile(startIndexMobile + 3)
-            setEndIndexMobile(endIndexMobile + 3)
+          {/* Forward Button */}
+          <IconButton
+            disabled={endIndex >= movies.length}
+            sx={{ backgroundColor: palette.background.alt }}
+            onClick={() => {
+              setStartIndex(startIndex + 5)
+              setEndIndex(endIndex + 5)
+            }}
+          >
+            <ArrowForward />
+          </IconButton>
+        </Box>
+      ) : (
+        <Box
+          display="flex"
+          flexDirection="row"
+          gap=".5rem"
+          sx={{
+            overflowY: "hidden",
+            overflowX: "scroll",
           }}
         >
-          <ArrowForward />
-        </IconButton>
-      </Box>
+          {movies.map((movie) => (
+            <MovieCard key={movie._id} movie={movie} />
+          ))}
+        </Box>
+      )}
     </div>
   )
 }
