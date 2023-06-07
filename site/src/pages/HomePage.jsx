@@ -21,6 +21,8 @@ const HomePage = () => {
   const movies = useSelector((state) => state.movies)
   const isFullSizeScreen = useMediaQuery("(min-width: 700px)")
 
+  document.title = "WatchLister | Home"
+
   useEffect(() => {
     const getMovies = async () => {
       const highRes = await getHighestRated()
