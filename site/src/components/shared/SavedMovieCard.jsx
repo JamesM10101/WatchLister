@@ -89,6 +89,14 @@ function SavedMovieCard({ movieId, token }) {
                 fontSize="1.2rem"
                 color={mode === "dark" ? "white" : "black"}
                 fontWeight="bold"
+                sx={{
+                  width: "80%",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  overflow: "hidden",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 1,
+                }}
               >
                 {movie.title ? movie.title : "ERROR"}
               </Typography>
