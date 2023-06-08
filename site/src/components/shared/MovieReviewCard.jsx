@@ -3,6 +3,7 @@ import {
   Circle,
   Delete,
   Edit,
+  Person,
   StarOutline,
   ThumbDownAlt,
   ThumbDownAltOutlined,
@@ -136,11 +137,13 @@ function MovieReviewCard({ movieId, reviewId, token }) {
                 src={`${process.env.REACT_APP_BACKEND_ADDRESS}/userImages/${reviewer.picturePath}`}
               />
             ) : (
-              <Avatar
-                alt="profile"
-                sx={{ bgcolor: palette.neutral.dark, scale: ".9" }}
-              >
-                {reviewer.username ? reviewer.username[0] : ""}
+              <Avatar alt="profile" sx={{ bgcolor: palette.neutral.dark }}>
+                <Person
+                  sx={{
+                    width: 24,
+                    height: 24,
+                  }}
+                />
               </Avatar>
             )}
 
