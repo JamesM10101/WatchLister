@@ -279,14 +279,14 @@ function AuthForm() {
             </Form>
           )}
         </Formik>
-      </Box>
 
-      {/* Error Alert */}
-      {severity && (
-        <Alert severity={severity} sx={{ marginTop: "1rem" }}>
-          <Typography>{alertMsg}</Typography>
-        </Alert>
-      )}
+        {/* Error Alert */}
+        {severity && (
+          <Alert severity={severity} sx={{ marginTop: "1rem" }}>
+            <Typography>{alertMsg}</Typography>
+          </Alert>
+        )}
+      </Box>
     </Box>
   )
 }
