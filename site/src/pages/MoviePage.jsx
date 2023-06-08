@@ -136,6 +136,7 @@ function MoviePage() {
               </Typography>
 
               <IconButton
+                aria-label={isSaved ? "Unsave Movie" : "Save Movie"}
                 onClick={() => {
                   if (user) {
                     toggleMovieSaved()
@@ -186,7 +187,7 @@ function MoviePage() {
               {!movie.posterPath.includes("null") ? (
                 <img
                   src={movie.posterPath}
-                  width={"30%"}
+                  width={"26.2%"}
                   draggable="false"
                   style={{ zIndex: 2 }}
                   alt={`${movie.title} poster`}
@@ -194,7 +195,7 @@ function MoviePage() {
               ) : (
                 <ImageNotSupported
                   sx={{
-                    width: "30%",
+                    width: "26.2%",
                     height: "100%",
                     alt: movie.title,
                     color: palette.mode !== "dark" ? "black" : "white",
@@ -203,7 +204,7 @@ function MoviePage() {
               )}
               <div
                 style={{
-                  width: "80%",
+                  width: "70%",
                 }}
               >
                 <div style={{ position: "relative" }}>

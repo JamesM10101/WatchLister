@@ -308,10 +308,13 @@ function MovieReviewCard({ movieId, reviewId, token }) {
           {user
             ? review.userId === user._id && (
                 <>
-                  <IconButton onClick={alertDeletion}>
+                  <IconButton aria-label="Delete" onClick={alertDeletion}>
                     <Delete />
                   </IconButton>
-                  <IconButton onClick={() => setIsReviewEdit(true)}>
+                  <IconButton
+                    aria-label="Edit"
+                    onClick={() => setIsReviewEdit(true)}
+                  >
                     <Edit />
                   </IconButton>
                 </>

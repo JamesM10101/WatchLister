@@ -69,6 +69,7 @@ function EditProfile({ user }) {
     >
       {/* Exit Button */}
       <IconButton
+        aria-label="Label"
         sx={{ scale: "1.5", float: "right", m: "4%" }}
         onClick={() => dispatch(setNeedUpdateForm())}
       >
@@ -131,6 +132,7 @@ function EditProfile({ user }) {
 
               {/* Update Button */}
               <Button
+                aria-label="Update"
                 fullWidth
                 type="submit"
                 sx={{

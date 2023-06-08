@@ -132,6 +132,7 @@ function CreateReviewCard({
           value={review}
         ></InputBase>
         <IconButton
+          aria-label="Submit Review"
           onClick={() => {
             if (user) {
               handleReview()

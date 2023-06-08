@@ -41,6 +41,7 @@ function MovieCarousel({ movies, title }) {
         >
           {/* Back Button */}
           <IconButton
+            aria-label="Previous"
             disabled={startIndex <= 0}
             sx={{
               backgroundColor: palette.background.alt,
@@ -60,6 +61,7 @@ function MovieCarousel({ movies, title }) {
 
           {/* Forward Button */}
           <IconButton
+            aria-label="Next"
             disabled={endIndex >= movies.length}
             sx={{ backgroundColor: palette.background.alt }}
             onClick={() => {

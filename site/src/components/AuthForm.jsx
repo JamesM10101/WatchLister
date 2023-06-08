@@ -121,6 +121,7 @@ function AuthForm() {
     >
       {/* Exit Button */}
       <IconButton
+        aria-label="Exit"
         sx={{ scale: "1.5", float: "right", m: "4%" }}
         onClick={() => dispatch(setNeedAuthForm())}
       >
@@ -242,6 +243,7 @@ function AuthForm() {
 
               {/* Register/Login Button */}
               <Button
+                aria-label={isLogin ? "Login" : "Register"}
                 fullWidth
                 type="submit"
                 sx={{

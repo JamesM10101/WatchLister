@@ -86,6 +86,7 @@ function Navbar() {
           <FlexBetween gap={isFullSizeScreen ? "1rem" : "0.1rem"}>
             {/* Search Icon */}
             <IconButton
+              aria-label="Search"
               onClick={() => setIsSearching(true)}
               sx={{ transform: "scale(1.3)", color: palette.neutral.dark }}
             >
@@ -94,6 +95,7 @@ function Navbar() {
 
             {/* Theme Mode */}
             <IconButton
+              aria-label="Change Theme"
               onClick={() => {
                 dispatch(setMode())
               }}

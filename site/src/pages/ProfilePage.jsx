@@ -120,6 +120,7 @@ function ProfilePage({ pUser = {} }) {
           {userId === currentUser._id ? (
             <div>
               <IconButton
+                aria-label="Log Out"
                 onClick={() => {
                   dispatch(setLogout())
                   navigate("/")
@@ -133,6 +134,7 @@ function ProfilePage({ pUser = {} }) {
                 <Logout />
               </IconButton>
               <IconButton
+                aria-label="Settings"
                 onClick={() => {
                   dispatch(setNeedUpdateForm())
                 }}

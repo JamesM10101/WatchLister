@@ -23,6 +23,7 @@ function SavedMoviesComponent({ movies = [] }) {
       ) : i === reviewCount ? (
         <Box width="100%" textAlign="center">
           <IconButton
+            aria-label="Load More"
             sx={{
               backgroundColor: palette.background.alt,
               margin: "auto",

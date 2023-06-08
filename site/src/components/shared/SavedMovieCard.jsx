@@ -121,6 +121,7 @@ function SavedMovieCard({ movieId, token }) {
 
         {/* Save Button */}
         <IconButton
+          aria-label={isSaved ? "Unsave Movie" : "Save Movie"}
           onClick={() => {
             toggleMovieSaved()
           }}
