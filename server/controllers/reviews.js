@@ -46,10 +46,11 @@ export const createReview = async (req, res) => {
     // update the user with their new review
     const user = await User.findById(userId)
     user.reviews.push(newReview._id)
-    await user.save()
+    const updatedUser = await user.save()
+    updatedUser.password = undefined
 
     // return the new review
-    res.status(201).json(newReview)
+    res.status(201).json({ review: newReview, user: updatedUser })
   } catch (err) {
     // return the error message
     res.status(500).json({ error: err.message })
@@ -141,10 +142,11 @@ export const toggleLikeReview = async (req, res) => {
     }
 
     // saved the updated user
-    await user.save()
+    const updatedUser = await user.save()
+    updatedUser.password = undefined
 
     // return the updated review
-    res.status(200).json(updatedReview)
+    res.status(200).json({ review: updatedReview, user: updatedUser })
   } catch (err) {
     // return the error message
     res.status(500).json({ error: err.message })
@@ -171,17 +173,21 @@ export const toggleDislikeReview = async (req, res) => {
     }
 
     // toggle the likes for the review and user
+    let updatedUser = user
     if (isLiked) {
       review.likes.delete(userId)
       user.likes.delete(id)
-      await user.save()
+
+      // save the updates and remove sensitive data
+      updatedUser = await user.save()
+      updatedUser.password = undefined
     }
 
     // save the updated review
     const result = await review.save()
 
     // return the updated review
-    res.status(200).json(result)
+    res.status(200).json({ review: result, user: updatedUser })
   } catch (err) {
     // return the error message
     res.status(500).json({ error: err.message })
@@ -192,15 +198,25 @@ export const editReview = async (req, res) => {
   try {
     // review id and post
     const { id } = req.params
+    const userId = req.header("userId")
     const { title, rating, description } = req.body
     const review = await Review.findById(id)
+    const reviewerId = review.userId
+    const user = await User.findById(userId)
     const movie = await Movie.findById(review.movieId)
+
+    // check that editing is authorized
+    if (reviewerId != userId && !user.admin) {
+      return res.status(401).json({
+        msg: "Not Authorized",
+      })
+    }
 
     // update the movie rating
     const totalStars = movie.rating * movie.reviews.length
     const ratingDiff = rating - review.rating
     movie.rating = ((totalStars + ratingDiff) / movie.reviews.length).toFixed(2)
-    await movie.save()
+    const updatedMovie = await movie.save()
 
     // update review
     review.title = title
@@ -209,7 +225,7 @@ export const editReview = async (req, res) => {
     const updatedReview = await review.save()
 
     // return the updated review
-    res.status(200).json(updatedReview)
+    res.status(200).json({ review: updatedReview, movie: updatedMovie })
   } catch (err) {
     // return the error message
     res.status(500).json({ error: err.message })
@@ -248,18 +264,26 @@ export const deleteReview = async (req, res) => {
     await movie.save()
 
     // remove the review from the movie
-    await movie.updateOne({
-      $pull: {
-        reviews: review._id,
+    const updatedMovie = await movie.updateOne(
+      {
+        $pull: {
+          reviews: review._id,
+        },
       },
-    })
+      { new: true }
+    )
 
     // remove the review from the users profile
-    await User.findByIdAndUpdate(user._id, {
-      $pull: {
-        reviews: review._id,
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        $pull: {
+          reviews: review._id,
+        },
       },
-    })
+      { new: true }
+    )
+    updatedUser.password = undefined
 
     // remove the liked review from all users likes
     await User.updateMany(
@@ -275,7 +299,9 @@ export const deleteReview = async (req, res) => {
     const result = await Review.findByIdAndDelete(id)
 
     // return the updated review
-    res.status(200).json(result)
+    res
+      .status(200)
+      .json({ review: result, user: updatedUser, movie: updatedMovie })
   } catch (err) {
     // return the error message
     res.status(500).json({ error: err.message })

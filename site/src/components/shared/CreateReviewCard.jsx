@@ -10,7 +10,7 @@ import React, { useState } from "react"
 import FlexBetween from "./FlexBetween"
 import { Send, Star } from "@mui/icons-material"
 import { useDispatch, useSelector } from "react-redux"
-import { setNeedAuthForm } from "../../state/state"
+import { setNeedAuthForm, setUser } from "../../state/state"
 import { useTheme } from "@emotion/react"
 import { createReview, editReview } from "../../functions/Reviews"
 
@@ -77,9 +77,13 @@ function CreateReviewCard({
       document.getElementById("createReviewTitle").value = ""
       document.getElementById("createReviewBody").value = ""
 
+      const data = await result.json()
+
       if (edit) {
         setIsReviewEdit(false)
-        setReviewForMovie(await result.json())
+        setReviewForMovie(data.review)
+      } else {
+        dispatch(setUser({ user: data.user }))
       }
     } else {
       setSeverity("error")

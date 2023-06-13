@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import FlexBetween from "./FlexBetween"
 import CreateReviewCard from "../shared/CreateReviewCard.jsx"
-import { setNeedAuthForm } from "../../state/state.js"
+import { setNeedAuthForm, setUser } from "../../state/state.js"
 import { Link } from "react-router-dom"
 import {
   deleteReviewById,
@@ -71,10 +71,17 @@ function MovieReviewCard({ movieId, reviewId, token }) {
     )
 
     if (res.status === 200) {
-      const updatedReview = await res.json()
+      const parsedRes = await res.json()
+
+      // update the like status
+      const updatedReview = parsedRes.review
       setReview(updatedReview)
+      console.log(updatedReview)
       setIsLiked(updatedReview.likes[user._id])
       setIsDisliked(updatedReview.dislikes[user._id])
+
+      // update the user
+      dispatch(setUser({ user: parsedRes.user }))
     }
   }
 
@@ -84,6 +91,7 @@ function MovieReviewCard({ movieId, reviewId, token }) {
     if (res.status === 200) {
       setSeverity("success")
       setAlertMsg("Review Deleted")
+      dispatch(setUser({ user: (await res.json()).user }))
     } else {
       setSeverity("error")
       setAlertMsg("Could Not Delete")
